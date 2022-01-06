@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import './Component.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Navbar,Nav, Container } from 'react-bootstrap';
+import { Navbar,Nav, Container, NavLink, NavItem } from 'react-bootstrap';
+import { Link } from "react-router-dom";
+import '../App.css';
+
 
 
 export default class NavBar extends Component {
@@ -11,27 +14,24 @@ export default class NavBar extends Component {
       
       <div>
 
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="Fixed-top">
               <Container>
-              <Navbar.Brand href="/">TechResQ</Navbar.Brand>
+              <Navbar.Brand href="/">TechResQ-plateform</Navbar.Brand>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
-                 
-                  <Nav.Link href= "/Services">Our Services</Nav.Link>
-                  <Nav.Link href= "/Join_Us">Join Us ?</Nav.Link>
-                 
+                  <NavItem>
+                     <Link to = "/Services"  style={{color:'white', textDecoration:'none', marginRight:'15px'}}>Our Services</Link>
+                     <Link to = "/Support"  style={{color:'white', textDecoration:'none'}}>Request Support </Link>
+                  </NavItem>
                 </Nav>
                 <Nav>
-                  <Nav.Link >Login</Nav.Link>
-                  <Nav.Link >
-                   Register
-                  </Nav.Link>
+                  <Link to = "/Login"  style={{color:'white', textDecoration:'none', marginRight:'10px'}}>Login</Link>
+                  <Link to = "/Register"  style={{color:'white', textDecoration:'none'}}>  Register </Link>
                 </Nav>
               </Navbar.Collapse>
               </Container>
             </Navbar>
-            
       </div>
     
     )

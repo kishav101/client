@@ -6,6 +6,170 @@ figcaption{
     font-size:x-large;
     color: white;
 }
-#landingPragraph{
-    font-weight: 50;
+
+.colHeight{
+    height:auto;
 }
+
+.backgroundFormColor{
+
+    background-color:#f2f2f0;
+}
+
+.backgroundSideMenuColor{
+    background-color:orange;
+}
+
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+section {
+    padding: 60px 0;
+}
+
+section .section-title {
+    text-align: center;
+    color: black;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+#footer {
+    background:#1d1c1b!important;
+}
+#footer h5{
+	padding-left: 10px;
+    border-left: 3px solid #eeeeee;
+    padding-bottom: 6px;
+    margin-bottom: 20px;
+    color:#ffffff;
+}
+#footer a {
+    color: #ffffff;
+    text-decoration: none !important;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
+#footer ul.social li{
+	padding: 3px 0;
+}
+#footer ul.social li a i {
+    margin-right: 5px;
+	font-size:25px;
+	-webkit-transition: .5s all ease;
+	-moz-transition: .5s all ease;
+	transition: .5s all ease;
+}
+#footer ul.social li:hover a i {
+	font-size:30px;
+	margin-top:-10px;
+}
+#footer ul.social li a,
+#footer ul.quick-links li a{
+	color:#ffffff;
+}
+#footer ul.social li a:hover{
+	color:#eeeeee;
+}
+#footer ul.quick-links li{
+	padding: 3px 0;
+	-webkit-transition: .5s all ease;
+	-moz-transition: .5s all ease;
+	transition: .5s all ease;
+}
+#footer ul.quick-links li:hover{
+	padding: 3px 0;
+	margin-left:5px;
+	font-weight:700;
+}
+#footer ul.quick-links li a i{
+	margin-right: 5px;
+}
+#footer ul.quick-links li:hover a i {
+    font-weight: 700;
+}
+
+@media (max-width:767px){
+	#footer h5 {
+    padding-left: 0;
+    border-left: transparent;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
+}
+}
+
+.shadow {
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12); 
+  }
+
+  .userNav {
+    
+    position:fixed;
+    width: 250px;
+    z-index: 1000;
+    left: 0;
+    top: 0px;
+    padding-top: 50px;
+    border-right: 1px solid #162636;
+    height: 100%;
+  }
+
+  .avatar {
+    vertical-align: middle;
+    width: 100px;
+    height:100px;
+    border-radius: 50%;
+  }
+
+  .endTabSpace{
+      margin-right: 10%;
+  }
+
+  .score-section {
+    display: flex;
+    font-size: 24px;
+    align-items: center;
+  }
+  
+  /* QUESTION/TIMER/LEFT SECTION */
+  .question-section {
+    width: 100%;
+    position: relative;
+  }
+  
+  .question-count {
+    margin-bottom: 20px;
+  }
+  
+  .question-count span {
+    font-size: 28px;
+  }
+  
+  .question-text {
+    margin-bottom: 12px;
+  }
+  
+  .timer-text {
+    background: rgb(230, 153, 12);
+    padding: 15px;
+    margin-top: 20px;
+    margin-right: 20px;
+    border: 5px solid rgb(255, 189, 67);
+    border-radius: 15px;
+    text-align: center;
+  }
+  
+  /* ANSWERS/RIGHT SECTION */
+  .answer-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+ 
+  
+  .correct {
+    background-color: #2f922f;
+  }
+  
+  .incorrect {
+    background-color: #ff3333;
+  }
+ 
