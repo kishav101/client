@@ -1,0 +1,11 @@
+figcaption{
+    position: absolute;
+    top: 25%;
+    text-align: center;
+    font-family: Tahoma;
+    font-size:x-large;
+    color: white;
+}
+#landingPragraph{
+    font-weight: 50;
+}
