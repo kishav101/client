@@ -16,7 +16,7 @@ export default class NavBar extends Component {
 
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="Fixed-top">
               <Container>
-              <Navbar.Brand href="/">TechResQ-plateform</Navbar.Brand>
+              <Navbar.Brand href="/">TechResQ</Navbar.Brand>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">

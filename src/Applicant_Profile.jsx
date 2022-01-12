@@ -19,6 +19,21 @@ import Fade from '@mui/material/Fade';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import IconButton from '@mui/material/IconButton';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import PrintIcon from '@mui/icons-material/Print';
+
+
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+
+import MenuItem from '@mui/material/MenuItem';
+
+
 export default function Applicant_Profile() {
 
     let UserEmail_Variable ="";
@@ -48,8 +63,11 @@ export default function Applicant_Profile() {
     let ticketStatusDB ='';
     let ticketUpdateDB ='';
     let ticketDateOpenedDB ='';
+    let ticketCatagoryDB ='';
+    let ticketDateClosedDB ='';
     let ticketTimeAssignedDB ='';
     let ticketReAssignedFromDB ='';
+    let ticketTechnicianEmailDB ='';
     
 	const questions = [
 		{
@@ -215,7 +233,11 @@ export default function Applicant_Profile() {
     const [ticketDateOpened, setTicketDateOpened] = useState('');
     const [ticketTimeAssigned, setTicketTimeAssigned] = useState('');
     const [ticketReAssignedFrom, setTicketReAssignedFrom] = useState('');
+
+
     const [checked, setChecked] = React.useState(false);
+    
+    let ticketTableIndex= 0;
 
 
     (function getNameCookie(){
@@ -388,9 +410,8 @@ function UpdateSkillsCompentencies(){
 
 (function retreieveApplicantCV(){
 
-    console.log('------------------rrrrr')
-    console.log('getUserdata');
-    console.log(UserEmail_Variable);
+    
+    
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
@@ -421,7 +442,7 @@ function UpdateSkillsCompentencies(){
 
 (function retreieveApplicantSettings(){
 
-    console.log('getUserdata');
+
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
@@ -543,7 +564,17 @@ function setTicketDataToTable(){
          ticketData.map((row)=>(
             <TableRow 
                     key={row.ticket_id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    onClick={(event)=>{
+                         
+                            let temp = event.currentTarget.outerText;
+                            temp = temp.substring(0,1).trim();
+                            ticketTableIndex = temp;
+                            console.log(ticketTableIndex)
+
+                            displayTicket(ticketTableIndex)
+                           }}
+                   >
                         <TableCell align="left">{row.ticket_id}</TableCell>
                         <TableCell align="left">{row.name}</TableCell>
                         <TableCell align="left">{row.description}</TableCell>
@@ -551,8 +582,9 @@ function setTicketDataToTable(){
                         <TableCell align="left">{row.email}</TableCell>
                         <TableCell align="left">{row.contact}</TableCell>
                         <TableCell align="left"> 
-                    <FormControlLabel id='displayToggleBtn'
-                        label="" control={<Switch checked={checked}  />}
+                    <FormControlLabel id='displayToggleBtn' 
+                        label="" control={<Switch checked={checked}  />} 
+                     
                     />
                 </TableCell>
             </TableRow>
@@ -566,8 +598,6 @@ function retrieveAllTechnicianTickets(){
         Axios.post("http://localhost:3001/getAllTechnicianTickets",{
             USER_EMAIL:UserEmail_Variable                     
           }).then((response)=>{
-            console.log('sssssssssssssssssssssssssssssssssssssssss')
-           console.log(response.data)
            
         })
 
@@ -587,6 +617,34 @@ function retrieveSearchTicketResults(){
     })
 }
 
+function displayTicket(index){
+
+  try{
+    Axios.post("http://localhost:3001/getSpecificTicketData",{
+        SEARCH_BY: index                   
+      }).then((response)=>{
+
+        ticketAddressDb=response.data[0].Address;
+        ticketContactDB=response.data[0].Contact;
+        ticketDateOpenedDBresponse.data[0].Date_Opened;
+        ticketDescriptionDbresponse.data[0].Description;
+        ticketEmailDB=response.data[0].Email;
+        ticketNameDB=response.data[0].Name;
+        ticketReAssignedFromDB=response.data[0].ReAssigned_From;
+        ticketSolutionDB=response.data[0].Solution;
+        ticketStatusDB=response.data[0].Status;
+        ticketTimeAssignedDB=response.data[0].Time_Assigned;
+        ticketUpdateDB=response.data[0].Update;
+        ticketTechnicianEmailDB=response.data[0].Technician_Email_ID;
+        ticketDateClosedDB=response.data[0].Date_Closed;
+        ticketCatagoryDB=response.data[0].Catagory;
+
+     
+    })
+  }
+  catch{}
+
+}
 
 
 
@@ -930,6 +988,58 @@ function retrieveSearchTicketResults(){
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="fourth" className="mt-2">
                                                 <Form>
+
+                                                    <div className='row mt-2'>
+                                                        <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                            <Card className='p-1 endTabSpace'>
+                                                                <div className='row'>
+                                                                
+                                                                        <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                        <IconButton  aria-label="delete">
+                                                                           <AutorenewIcon/>
+                                                                        </IconButton>
+                                                                        <TextField id="search" size='small' style={{display:'inline-flex'}} label="Search field" type="search" />
+                                                                          
+                                                                                      <Select
+                                                                                            labelId="demo-simple-select-label"
+                                                                                            id="demo-simple-select"
+                                                                                            value="Open"
+                                                                                            label="Status"
+                                                                                            size='small'
+                                                                                            className="px-4"
+                                                                                            >
+                                                                                          <MenuItem value="Open">Call ID</MenuItem>
+                                                                                          <MenuItem value="Pending">Engineer Name</MenuItem>
+                                                                                          <MenuItem value="Closed">Customer Name</MenuItem>
+                                                                                      </Select>
+
+                                                                                      <IconButton aria-label="search">
+                                                                                            <SearchSharpIcon/>
+                                                                                      </IconButton>
+
+                                                                                    <div className='mx-3' style={{float:'right'}}>
+                                                                                    
+                                                                                      <IconButton style={{marginRight:'40px'}} aria-label="print tickets">
+                                                                                            <PrintIcon/>
+                                                                                      </IconButton>
+                                                                                    
+                                                                                    
+                                                                                      <IconButton aria-label="back">
+                                                                                            <ArrowBackIcon/>
+                                                                                      </IconButton>
+
+                                                                                    <IconButton aria-label="foward">
+                                                                                            <ArrowForwardIcon/>
+                                                                                      </IconButton>
+                                                                                    </div>
+                                                                        
+                                                                        </div>
+                                                                        
+                                                                </div>
+                                                            </Card>
+                                                        </div>
+                                                    </div>
+
                                                     <div className="row mt-2">
                                                         <div className="col-xs-12 col-sm-12 col-md-12">
                                                             <div className="endTabSpace">
@@ -937,7 +1047,7 @@ function retrieveSearchTicketResults(){
                                                                 <div className="col-xs-12 col-sm-12 col-md-12">
                                                                   
                                                                     <TableContainer component={Paper}>
-                                                                        <Table stickyHeader sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
+                                                                        <Table stickyHeader sx={{ minWidth: 650 }}  size="small" aria-label="sticky table">
                                                                             <TableHead>
                                                                                 <TableRow>
                                                                                     <TableCell align="left"><b>Ticket No.</b></TableCell>
@@ -969,48 +1079,120 @@ function retrieveSearchTicketResults(){
                                                                                 <hr style={{color:'orange'}}></hr>
                                                                                 <div className='row'>
                                                                                     <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                    <Form.Group className="" >
-                                                                                                    <Form.Label size='sm' >Customer Name</Form.Label>
-                                                                                                    <Form.Control type="text" size='sm'  onChange={(event)=>{
-                                                                                                        setTicketName(event.target.value);
-                                                                                                    }} />
-                                                                                    </Form.Group>
+                                                                                    <TextField
+                                                                                        label="Name"
+                                                                                        id="standard-size-small"
+                                                                                        defaultValue={ticketNameDB}
+                                                                                        size="small"
+                                                                                        variant="standard"
+                                                                                        onClick={(event)=>{
+                                                                                            setTicketName(event.target.value)
+                                                                                        }}
+                                                                                        />
                                                                                     </div>
                                                                                     <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                    <Form.Group className="" >
-                                                                                                    <Form.Label size='sm' >Customer Address</Form.Label>
-                                                                                                    <Form.Control type="text" size='sm'   onChange={(event)=>{
-                                                                                                        setTicketAddress(event.target.value);
-                                                                                                    }} />
-                                                                                    </Form.Group>
+                                                                                    <TextField
+                                                                                        label="Address"
+                                                                                        id="standard-size-small"
+                                                                                        defaultValue={ticketAddressDb}
+                                                                                        size="small"
+                                                                                        variant="standard"
+                                                                                        onClick={(event)=>{
+                                                                                            setTicketAddress(event.target.value)
+                                                                                        }}
+                                                                                        />
                                                                                     </div>
                                                                                     <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                    <Form.Group className="" >
-                                                                                                    <Form.Label size='sm' >Customer Contact</Form.Label>
-                                                                                                    <Form.Control type="text" size='sm'   onChange={(event)=>{
-                                                                                                        setTicketContact(event.target.value);
-                                                                                                    }} />
-                                                                                    </Form.Group>
+                                                                                    <TextField
+                                                                                        label="Contact"
+                                                                                        id="standard-size-small"
+                                                                                        defaultValue={ticketContactDB}
+                                                                                        size="small"
+                                                                                        variant="standard"
+                                                                                        onClick={(event)=>{
+                                                                                            setTicketContact(event.target.value)
+                                                                                        }}
+                                                                                        />
                                                                                     </div>
                                                                                     <div className='col-xs-12 col-sm-3 col-md-3'>
                                                                                     <Form.Group className="" controlId="formBasicEmail">
-                                                                                        <Form.Label>Ticket Status</Form.Label>
-                                                                                        <Form.Select size='sm' aria-label="Default select example">
-                                                                                                <option value="Open">Open</option>
-                                                                                                <option value="Closed">Closed</option>
-                                                                                                <option value="Pending">Pending</option>
-                                                                                                onClick={(event)=>{
-                                                                                                setTicketStatus(event.target.value);
+                                                                                    <TextField
+                                                                                        label="Email"
+                                                                                        id="standard-size-small"
+                                                                                        defaultValue=""
+                                                                                        size="small"
+                                                                                        variant="standard"
+                                                                                        onClick={(event)=>{
+                                                                                            setTicketContact(event.target.value)
                                                                                         }}
-                                                                                            
-                                                                                        </Form.Select>
+                                                                                        />
                                                                                     </Form.Group>
                                                                                     </div>
                                                                                 </div>
                                                                             </Card>
                                                                 </Tab>
                                                                 <Tab eventKey="profile" title="Ticket Details">
-                                                                is
+                                                                
+                                                                <Card className='shadow endTabSpace p-3'>
+                                                                              
+                                                                              <hr style={{color:'orange'}}></hr>
+                                                                              <div className='row'>
+                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                  <TextField
+                                                                                      label="Name"
+                                                                                      id="standard-size-small"
+                                                                                      defaultValue=""
+                                                                                      size="small"
+                                                                                      variant="standard"
+                                                                                      onClick={(event)=>{
+                                                                                          setTicketName(event.target.value)
+                                                                                      }}
+                                                                                      />
+                                                                                  </div>
+                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                  <TextField
+                                                                                      label="Address"
+                                                                                      id="standard-size-small"
+                                                                                      defaultValue=""
+                                                                                      size="small"
+                                                                                      variant="standard"
+                                                                                      onClick={(event)=>{
+                                                                                          setTicketAddress(event.target.value)
+                                                                                      }}
+                                                                                      />
+                                                                                  </div>
+                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                  <TextField
+                                                                                      label="Contact"
+                                                                                      id="standard-size-small"
+                                                                                      defaultValue=""
+                                                                                      size="small"
+                                                                                      variant="standard"
+                                                                                      onClick={(event)=>{
+                                                                                          setTicketContact(event.target.value)
+                                                                                      }}
+                                                                                      />
+                                                                                  </div>
+                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                  <Form.Group className="" controlId="formBasicEmail">
+                                                                                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                                                                                      <Select
+                                                                                      labelId="demo-simple-select-label"
+                                                                                      id="demo-simple-select"
+                                                                                      value="Open"
+                                                                                      label="Status"
+                                                                                      size='small'
+                                                                                      className="px-4"
+                                                                                      >
+                                                                                          <MenuItem value="Open">Open</MenuItem>
+                                                                                          <MenuItem value="Pending">Pending</MenuItem>
+                                                                                          <MenuItem value="Closed">Closed</MenuItem>
+                                                                                      </Select>
+                                                                                  </Form.Group>
+                                                                                  </div>
+                                                                              </div>
+                                                                          </Card>
+
                                                                 </Tab>
                                                                 <Tab eventKey="contact" title="Contact">
                                                                      strtong                                                         
