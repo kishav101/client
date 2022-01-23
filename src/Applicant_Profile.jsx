@@ -625,7 +625,7 @@ function displayTicket(index){
         SEARCH_BY: index                   
       }).then((response)=>{
 
-        ticketAddressDb=response.data[0].Address
+        ticketAddressDb=response.data[0].Address;
         ticketContactDB=response.data[0].Contact;
         ticketDateOpenedDB=response.data[0].Date_Opened;
         ticketDescriptionDb=response.data[0].Description;
@@ -640,6 +640,9 @@ function displayTicket(index){
         ticketDateClosedDB=response.data[0].Date_Closed;
         ticketCatagoryDB=response.data[0].Catagory;
 
+    }).then(()=>{
+         setTicketId(index);
+         setTicketName(ticketNameDB);
     })
   }
   catch{}
@@ -1082,10 +1085,10 @@ function displayTicket(index){
                                                                                     <TextField
                                                                                         label="Name"
                                                                                         id="standard-size-small"
-                                                                                        defaultValue={ticketNameDB}
+                                                                                        defaultValue={ticketName}
                                                                                         size="small"
                                                                                         variant="standard"
-                                                                                        onClick={(event)=>{
+                                                                                        onChange={(event)=>{
                                                                                             setTicketName(event.target.value)
                                                                                         }}
                                                                                         />
