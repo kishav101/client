@@ -30,6 +30,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 import MenuItem from '@mui/material/MenuItem';
 
@@ -624,10 +625,10 @@ function displayTicket(index){
         SEARCH_BY: index                   
       }).then((response)=>{
 
-        ticketAddressDb=response.data[0].Address;
+        ticketAddressDb=response.data[0].Address
         ticketContactDB=response.data[0].Contact;
-        ticketDateOpenedDBresponse.data[0].Date_Opened;
-        ticketDescriptionDbresponse.data[0].Description;
+        ticketDateOpenedDB=response.data[0].Date_Opened;
+        ticketDescriptionDb=response.data[0].Description;
         ticketEmailDB=response.data[0].Email;
         ticketNameDB=response.data[0].Name;
         ticketReAssignedFromDB=response.data[0].ReAssigned_From;
@@ -639,7 +640,6 @@ function displayTicket(index){
         ticketDateClosedDB=response.data[0].Date_Closed;
         ticketCatagoryDB=response.data[0].Catagory;
 
-     
     })
   }
   catch{}
@@ -1119,11 +1119,11 @@ function displayTicket(index){
                                                                                     <TextField
                                                                                         label="Email"
                                                                                         id="standard-size-small"
-                                                                                        defaultValue=""
+                                                                                        defaultValue={ticketEmailDB}
                                                                                         size="small"
                                                                                         variant="standard"
                                                                                         onClick={(event)=>{
-                                                                                            setTicketContact(event.target.value)
+                                                                                            
                                                                                         }}
                                                                                         />
                                                                                     </Form.Group>
@@ -1137,59 +1137,27 @@ function displayTicket(index){
                                                                               
                                                                               <hr style={{color:'orange'}}></hr>
                                                                               <div className='row'>
-                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                  <TextField
-                                                                                      label="Name"
-                                                                                      id="standard-size-small"
-                                                                                      defaultValue=""
-                                                                                      size="small"
-                                                                                      variant="standard"
-                                                                                      onClick={(event)=>{
-                                                                                          setTicketName(event.target.value)
-                                                                                      }}
-                                                                                      />
+                                                                                  <div className='col-xs-12 col-sm-6 col-md-6'>
+                                                                                  <InputLabel id="demo-simple-select-label">Description</InputLabel>
+                                                                                  <TextareaAutosize
+                                                                                        minRows={4}
+                                                                                        aria-label="maximum height"
+                                                                                        placeholder="Description"
+                                                                                        defaultValue={ticketDescriptionDb}
+                                                                                        style={{ width: 400 }}
+                                                                                        />
                                                                                   </div>
-                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                  <TextField
-                                                                                      label="Address"
-                                                                                      id="standard-size-small"
-                                                                                      defaultValue=""
-                                                                                      size="small"
-                                                                                      variant="standard"
-                                                                                      onClick={(event)=>{
-                                                                                          setTicketAddress(event.target.value)
-                                                                                      }}
-                                                                                      />
+                                                                                  <div className='col-xs-12 col-sm-6 col-md-6'>
+                                                                                  <InputLabel id="demo-simple-select-label">Updates</InputLabel>
+                                                                                  <TextareaAutosize
+                                                                                        minRows={4}
+                                                                                        aria-label="maximum height"
+                                                                                        placeholder="Updates"
+                                                                                        defaultValue={ticketUpdateDB}
+                                                                                        style={{ width: 400 }}
+                                                                                        />
                                                                                   </div>
-                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                  <TextField
-                                                                                      label="Contact"
-                                                                                      id="standard-size-small"
-                                                                                      defaultValue=""
-                                                                                      size="small"
-                                                                                      variant="standard"
-                                                                                      onClick={(event)=>{
-                                                                                          setTicketContact(event.target.value)
-                                                                                      }}
-                                                                                      />
-                                                                                  </div>
-                                                                                  <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                  <Form.Group className="" controlId="formBasicEmail">
-                                                                                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                                                                                      <Select
-                                                                                      labelId="demo-simple-select-label"
-                                                                                      id="demo-simple-select"
-                                                                                      value="Open"
-                                                                                      label="Status"
-                                                                                      size='small'
-                                                                                      className="px-4"
-                                                                                      >
-                                                                                          <MenuItem value="Open">Open</MenuItem>
-                                                                                          <MenuItem value="Pending">Pending</MenuItem>
-                                                                                          <MenuItem value="Closed">Closed</MenuItem>
-                                                                                      </Select>
-                                                                                  </Form.Group>
-                                                                                  </div>
+                                                                                  m
                                                                               </div>
                                                                           </Card>
 
