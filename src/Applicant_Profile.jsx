@@ -228,12 +228,15 @@ export default function Applicant_Profile() {
     const [ticketDescription, setTicketDescription] = useState('');
     const [ticketAddress, setTicketAddress] = useState('');
     const [ticketContact, setTicketContact] = useState('');
+    const [ticketEmail, setTicketEmail] = useState('');
     const [ticketSolution, setTicketSolution] = useState('');
     const [ticketStatus, setTicketStatus] = useState('');
     const [ticketUpdate, setTicketUpdate] = useState('');
     const [ticketDateOpened, setTicketDateOpened] = useState('');
     const [ticketTimeAssigned, setTicketTimeAssigned] = useState('');
     const [ticketReAssignedFrom, setTicketReAssignedFrom] = useState('');
+    const [ticketDateClosed, setTicketDateClosed] = useState('');
+    const [ticketTechnicianEmail, setTicketTechnicianEmail] = useState('');
 
 
     const [checked, setChecked] = React.useState(false);
@@ -625,24 +628,29 @@ function displayTicket(index){
         SEARCH_BY: index                   
       }).then((response)=>{
 
-        ticketAddressDb=response.data[0].Address;
-        ticketContactDB=response.data[0].Contact;
-        ticketDateOpenedDB=response.data[0].Date_Opened;
-        ticketDescriptionDb=response.data[0].Description;
-        ticketEmailDB=response.data[0].Email;
-        ticketNameDB=response.data[0].Name;
-        ticketReAssignedFromDB=response.data[0].ReAssigned_From;
-        ticketSolutionDB=response.data[0].Solution;
-        ticketStatusDB=response.data[0].Status;
-        ticketTimeAssignedDB=response.data[0].Time_Assigned;
-        ticketUpdateDB=response.data[0].Update;
-        ticketTechnicianEmailDB=response.data[0].Technician_Email_ID;
-        ticketDateClosedDB=response.data[0].Date_Closed;
-        ticketCatagoryDB=response.data[0].Catagory;
+        setTicketAddress(response.data[0].Address)
+        setTicketId(index);
+        setTicketContact(response.data[0].Contact);
+        setTicketDateOpened(response.data[0].Date_Opened);
+        setTicketDescription(response.data[0].Description);
+        setTicketEmail(response.data[0].Email);
+        setTicketName(response.data[0].Name);
+        setTicketReAssignedFrom(response.data[0].ReAssigned_From);
+        setTicketSolution(response.data[0].Solution);
+        setTicketStatus(response.data[0].Status);
+        setTicketTimeAssigned(response.data[0].Time_Assigned)
+        setTicketUpdate(response.data[0].Update);
+        setTicketTechnicianEmail(response.data[0].Technician_Email_ID);
+        setTicketDateClosed(response.data[0].Date_Closed);
+       
+       
+       // ticketCatagoryDB=response.data[0].Catagory;
+
+        
 
     }).then(()=>{
          setTicketId(index);
-         setTicketName(ticketNameDB);
+        
     })
   }
   catch{}
@@ -1085,7 +1093,7 @@ function displayTicket(index){
                                                                                     <TextField
                                                                                         label="Name"
                                                                                         id="standard-size-small"
-                                                                                        defaultValue={ticketName}
+                                                                                        value={ticketName}
                                                                                         size="small"
                                                                                         variant="standard"
                                                                                         onChange={(event)=>{
@@ -1097,7 +1105,7 @@ function displayTicket(index){
                                                                                     <TextField
                                                                                         label="Address"
                                                                                         id="standard-size-small"
-                                                                                        defaultValue={ticketAddressDb}
+                                                                                        value={ticketAddress}
                                                                                         size="small"
                                                                                         variant="standard"
                                                                                         onClick={(event)=>{
@@ -1109,7 +1117,7 @@ function displayTicket(index){
                                                                                     <TextField
                                                                                         label="Contact"
                                                                                         id="standard-size-small"
-                                                                                        defaultValue={ticketContactDB}
+                                                                                        value={ticketContact}
                                                                                         size="small"
                                                                                         variant="standard"
                                                                                         onClick={(event)=>{
@@ -1122,7 +1130,7 @@ function displayTicket(index){
                                                                                     <TextField
                                                                                         label="Email"
                                                                                         id="standard-size-small"
-                                                                                        defaultValue={ticketEmailDB}
+                                                                                        value={ticketEmail}
                                                                                         size="small"
                                                                                         variant="standard"
                                                                                         onClick={(event)=>{
@@ -1146,6 +1154,7 @@ function displayTicket(index){
                                                                                         minRows={4}
                                                                                         aria-label="maximum height"
                                                                                         placeholder="Description"
+                                                                                        value={ticketDescription}
                                                                                         defaultValue={ticketDescriptionDb}
                                                                                         style={{ width: 400 }}
                                                                                         />
@@ -1155,12 +1164,13 @@ function displayTicket(index){
                                                                                   <TextareaAutosize
                                                                                         minRows={4}
                                                                                         aria-label="maximum height"
+                                                                                        value={ticketUpdate}
                                                                                         placeholder="Updates"
                                                                                         defaultValue={ticketUpdateDB}
                                                                                         style={{ width: 400 }}
                                                                                         />
                                                                                   </div>
-                                                                                  m
+                                                                                  
                                                                               </div>
                                                                           </Card>
 
