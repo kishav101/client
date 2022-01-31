@@ -118,17 +118,14 @@ useEffect( ()=>{
             userEmail1:userEmail
         }).then((response)=>{
           
-    //  let x_email = response.data[0].Email_ID;
+    
 
            console.log(response.data[0].password);
            console.log(userPassword);
            if(response.data[0].password===userPassword)
             {
-                console.log('kiinini')
+                navigate('/Applicant_Profile');
             }
-          
-           
-           
         })
    }
 
@@ -169,15 +166,15 @@ useEffect( ()=>{
                                                         />
                                                         <Form.Label>Password</Form.Label>
                                                         <TextField
-                                                            required
-                                                            id="outlined-required"
-                                                            label="Required"
-                                                            placeholder='***********'
-                                                            type="password"
-                                                            onChange={(event)=>{
-                                                                setUserPassword(event.target.value);
-                                                                    }}
-                                                            />        
+                                                        required
+                                                        id="outlined-required"
+                                                        label="Required"
+                                                        type='password'
+                                                        placeholder='John@somewhere.com'
+                                                        onChange={(event)=>{
+                                                                    setUserPassword(event.target.value);
+                                                                }}
+                                                        />   
                                               
                                                
                                      
