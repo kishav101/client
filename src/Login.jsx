@@ -48,7 +48,6 @@ useEffect( ()=>{
     const clientId ="1021479639634-u6k8ator1sfup9uhpe7aasvc0j4qbbof.apps.googleusercontent.com";
     const [userEmail, setUserEmail]= useState('');
     const [userPassword, setUserPassword]= useState('');
-    const[userList, setUserList] = useState([]);
     const[showLoginButton, setShowLoginButton] = useState(true);
     const[showLogoutButton, setShowLogoutButton] = useState(false);
 
@@ -112,64 +111,22 @@ useEffect( ()=>{
         setShowLogoutButton(false);
     }
 
-function insertGoogleAccount(){
-
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-
-    fetch('http://localhost:3001/insertUserGoogleAccount', {
-        method: "POST",
-        body: JSON.stringify({
-             googleEmail:GoogleEmail,
-             googleName: GoogleName,
-             googleAvatar: GoogleImgURL,
-             googleGoogle:GoogleID
-             }),
-        headers
-        });
-}
-
- function checkGoogleAccountExits(){ 
-
-        Axios.post("http://localhost:3001/checkGoogleAccountExits",{
-            userEmail:userEmail,
-            userPassword:userPassword
-        }).then((response)=>{
-          
-           let x_email = response.data[0].Email
-            
-            if( userEmail.toUpperCase() === x_email.toUpperCase())
-            {
-                
-                 navigate('/Applicant_Profile'); 
-            }
-            else
-            {
-                alert("Username and Password Incorrect")
-            }
-           
-        })
-   }
 
  function checkUserList(){ 
    
-     Axios.post("http://localhost:3001/checkUserLogon",{
-            userEmail:userEmail,
-            userPassword:userPassword
+     Axios.post("http://localhost:3001/getLoginPassword",{
+            userEmail1:userEmail
         }).then((response)=>{
           
-         let x_email = response.data[0].Email_ID;
+    //  let x_email = response.data[0].Email_ID;
 
-           console.log(x_email);
-            if( userEmail === x_email)
+           console.log(response.data[0].password);
+           console.log(userPassword);
+           if(response.data[0].password===userPassword)
             {
-                 setLoginCookieValues();
-                 navigate('/Applicant_Profile'); 
+                console.log('kiinini')
             }
-            else
-            {
-                alert("Username and Password Incorrect")
-            }
+          
            
            
         })
@@ -206,7 +163,7 @@ function insertGoogleAccount(){
                                                         id="outlined-required"
                                                         label="Required"
                                                         placeholder='John@somewhere.com'
-                                                        onClick={(event)=>{
+                                                        onChange={(event)=>{
                                                                     setUserEmail(event.target.value);
                                                                 }}
                                                         />
@@ -217,7 +174,7 @@ function insertGoogleAccount(){
                                                             label="Required"
                                                             placeholder='***********'
                                                             type="password"
-                                                            onClick={(event)=>{
+                                                            onChange={(event)=>{
                                                                 setUserPassword(event.target.value);
                                                                     }}
                                                             />        
