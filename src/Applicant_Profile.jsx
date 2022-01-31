@@ -18,7 +18,7 @@ import Paper from '@mui/material/Paper';
 import Fade from '@mui/material/Fade';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-
+import TablePagination from '@mui/material/TablePagination';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import IconButton from '@mui/material/IconButton';
@@ -31,7 +31,7 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-
+import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 
 
@@ -530,27 +530,6 @@ function retrieveAppplications(){
     })
 }
 
-function setApplicationDataToTable(){
-
-    return applicationData.map( (application, index) => {
-
-        const{Applicant_Fullname, Application_Number, Application_Status, Date_Captured, Email_ID, Termination_Date, Test_Catagory, Test_Score} = application
-           
-        return(
-                <tr key={Application_Number}>
-                    <td>{Application_Number}</td>
-                    <td>{Applicant_Fullname}</td>
-                    <td>{Application_Status}</td>
-                    <td>{Date_Captured}</td>
-                    <td>{Email_ID}</td>
-                    <td>{Termination_Date}</td>
-                    <td>{Test_Catagory}</td>
-                    <td>{Test_Score}</td>
-                </tr>
-            )
-    })
-
-}
 
  function retrieveTechnicianTickets(){
 
@@ -579,7 +558,7 @@ function setTicketDataToTable(){
                             displayTicket(ticketTableIndex)
                            }}
                    >
-                        <TableCell align="left">{row.ticket_id}</TableCell>
+                        <TableCell component="th" scope="row" align="left">{row.ticket_id}</TableCell>
                         <TableCell align="left">{row.name}</TableCell>
                         <TableCell align="left">{row.description}</TableCell>
                         <TableCell align="left">{row.address}</TableCell>
@@ -592,6 +571,7 @@ function setTicketDataToTable(){
                     />
                 </TableCell>
             </TableRow>
+            
  )))
 }
 
@@ -656,6 +636,19 @@ function displayTicket(index){
   catch{}
 
 }
+
+const [page, setPage] = React.useState(0);
+const [rowsPerPage, setRowsPerPage] = React.useState(2);
+
+const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 2));
+    setPage(0);
+  };
+
 
 
 
@@ -1059,22 +1052,57 @@ function displayTicket(index){
                                                                   
                                                                     <TableContainer component={Paper}>
                                                                         <Table stickyHeader sx={{ minWidth: 650 }}  size="small" aria-label="sticky table">
-                                                                            <TableHead>
-                                                                                <TableRow>
-                                                                                    <TableCell align="left"><b>Ticket No.</b></TableCell>
+                                                                            <TableHead stickyHeader>
+                                                                                <TableRow style={{backgroundColor:'black'}}>
+                                                                                    <TableCell align="left"><b>Ticket</b></TableCell>
                                                                                     <TableCell align="left"> <b>Fullname</b></TableCell>
                                                                                     <TableCell align="left"> <b>Description</b></TableCell>
                                                                                     <TableCell align="left"><b>Address</b></TableCell>
                                                                                     <TableCell align="left"><b>Email</b></TableCell>
                                                                                     <TableCell align="left"><b>Contact</b></TableCell>
-                                                                                    <TableCell align="left"><b>Show</b></TableCell>
+                                                                                   
                                                                                 </TableRow>
                                                                             </TableHead>
                                                                                 <TableBody>
-                                                                                    {setTicketDataToTable()}
+                                                                                {ticketData
+                                                                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                                                        .map((row, index) => {
+                                                                                           console.log(row);
+                                                                                           return( 
+                                                                                               
+                                                                                               <TableRow hover key={row.ticket_id}>
+
+                                                                                            <TableCell component="th" scope="row" align="left">{row.ticket_id}</TableCell>
+                                                                                                <TableCell align="left">{row.name}</TableCell>
+                                                                                                <TableCell align="left">{row.description}</TableCell>
+                                                                                                <TableCell align="left">{row.address}</TableCell>
+                                                                                                <TableCell align="left">{row.email}</TableCell>
+                                                                                                <TableCell align="left">{row.contact}</TableCell>
+                                                                                               
+
+                                                                                            </TableRow>);
+
+                                                                                          
+
+                                                                                        })}
                                                                                 </TableBody>
+                                                                               
                                                                         </Table>
+                                                                     
+                                                                       
+                                                                        <TablePagination 
+                                                                               
+                                                                                rowsPerPageOptions={[2, 25, 100]}
+                                                                                component="div"
+                                                                                color="primary"
+                                                                                count={ticketData.length}
+                                                                                rowsPerPage={rowsPerPage}
+                                                                                page={page}
+                                                                                onPageChange={handleChangePage}
+                                                                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                                                            />
                                                                     </TableContainer>
+                                                                   
                                                                 </div>
                                                             </div>  
                                                             </div>
