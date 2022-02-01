@@ -1,7 +1,7 @@
 import React from 'react'
 import Applicant_Profile_Nav  from './Components/Applicant_Profile_Nav';
 import landingImage from './Assets/landingBackground.jpg';
-import { Card, Form,Button,Tab,Tabs, Col, Row, Nav } from 'react-bootstrap';
+import { Card, Form, Col, Tab, Tabs, Row, Nav } from 'react-bootstrap';
 import { useState, useEffect,useRef } from 'react';
 import './App.css';
 import {  HouseDoorFill, FilePerson,AppIndicator,GearFill, BoxArrowLeft } from 'react-bootstrap-icons';
@@ -25,15 +25,39 @@ import IconButton from '@mui/material/IconButton';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PrintIcon from '@mui/icons-material/Print';
-
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 
+import PropTypes from 'prop-types';
+import SwipeableViews from 'react-swipeable-views';
+import { useTheme } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import { Tabs as muiTabs} from '@mui/material/Tabs';
+
+import Button from '@mui/material/Button'
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MailIcon from '@mui/icons-material/Mail';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 export default function Applicant_Profile() {
 
@@ -250,6 +274,7 @@ export default function Applicant_Profile() {
        
             let dummyVariable = nameCookie.substring(nameCookie.lastIndexOf("=")+1).trim();
             UserEmail_Variable=dummyVariable;
+            console.log(UserEmail_Variable)
     })();
 
     function prettyTable(){
@@ -650,13 +675,18 @@ const handleChangePage = (event, newPage) => {
   };
 
 
+  const [value, setValue] = React.useState('1');
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
     return (
     <div>
  
     <Applicant_Profile_Nav/>
-        <Tab.Container id="left-tabs-example" defaultActiveKey="first" >
+    
+    <Tab.Container id="left-tabs-example" defaultActiveKey="first" >
                                 <Row>
                                     <Col sm={3}>
                                     <Nav variant="pills" className="flex-column userNav" style={{backgroundColor:'#f7f7f7',color:'white'}}>
@@ -990,7 +1020,7 @@ const handleChangePage = (event, newPage) => {
                                                 </div>
 
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="fourth" className="mt-2">
+                                        <Tab.Pane eventKey="fourth" className="mt-2 endTabSpace">
                                                 <Form>
 
                                                     <div className='row mt-2'>
@@ -1044,16 +1074,16 @@ const handleChangePage = (event, newPage) => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="row mt-2">
+                                                    <div className="row mt-2" >
                                                         <div className="col-xs-12 col-sm-12 col-md-12">
-                                                            <div className="endTabSpace">
+                                                            <div className=""  >
                                                             <div className="row mt-4">
-                                                                <div className="col-xs-12 col-sm-12 col-md-12">
+                                                                <div className="col-xs-12 col-sm-12 col-md-12" className='p-1' style={{backgroundColor:'grey',overflowY:'scroll'}}>
                                                                   
-                                                                    <TableContainer component={Paper}>
+                                                                    <TableContainer component={Paper} >
                                                                         <Table stickyHeader sx={{ minWidth: 650 }}  size="small" aria-label="sticky table">
-                                                                            <TableHead stickyHeader>
-                                                                                <TableRow style={{backgroundColor:'black'}}>
+                                                                            <TableHead stickyHeader style={{backgroundColor:'black'}}>
+                                                                                <TableRow >
                                                                                     <TableCell align="left"><b>Ticket</b></TableCell>
                                                                                     <TableCell align="left"> <b>Fullname</b></TableCell>
                                                                                     <TableCell align="left"> <b>Description</b></TableCell>
@@ -1070,7 +1100,16 @@ const handleChangePage = (event, newPage) => {
                                                                                            console.log(row);
                                                                                            return( 
                                                                                                
-                                                                                               <TableRow hover key={row.ticket_id}>
+                                                                                               <TableRow hover key={row.ticket_id}
+                                                                                                onClick={(event)=>{
+                         
+                                                                                                        let temp = event.currentTarget.outerText;
+                                                                                                        temp = temp.substring(0,1).trim();
+                                                                                                        ticketTableIndex = temp;
+                                                                                                        console.log(ticketTableIndex)
+
+                                                                                                        displayTicket(ticketTableIndex)
+                                                                                                        }}>
 
                                                                                             <TableCell component="th" scope="row" align="left">{row.ticket_id}</TableCell>
                                                                                                 <TableCell align="left">{row.name}</TableCell>
@@ -1099,7 +1138,7 @@ const handleChangePage = (event, newPage) => {
                                                                                 rowsPerPage={rowsPerPage}
                                                                                 page={page}
                                                                                 onPageChange={handleChangePage}
-                                                                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                                                              //  onRowsPerPageChange={handleChangeRowsPerPage}
                                                                             />
                                                                     </TableContainer>
                                                                    
@@ -1109,73 +1148,95 @@ const handleChangePage = (event, newPage) => {
                                                         </div>
                                                     </div>
 
-                                                    <div className='row mt-4 '>
-                                                        <div className='col-xs-12 col-sm-12 col-md-12 '>
-                                                        <Tabs  className="mb-3 endTabSpace" size="sm" >
-                                                                <Tab eventKey="home" title="Client Details" >
-                                                                                <Card className='shadow endTabSpace p-3'>
-                                                                              
-                                                                                <hr style={{color:'orange'}}></hr>
-                                                                                <div className='row'>
-                                                                                    <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                    <TextField
-                                                                                        label="Name"
-                                                                                        id="standard-size-small"
-                                                                                        value={ticketName}
-                                                                                        size="small"
-                                                                                        variant="standard"
-                                                                                        onChange={(event)=>{
-                                                                                            setTicketName(event.target.value)
-                                                                                        }}
-                                                                                        />
-                                                                                    </div>
-                                                                                    <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                    <TextField
-                                                                                        label="Address"
-                                                                                        id="standard-size-small"
-                                                                                        value={ticketAddress}
-                                                                                        size="small"
-                                                                                        variant="standard"
-                                                                                        onClick={(event)=>{
-                                                                                            setTicketAddress(event.target.value)
-                                                                                        }}
-                                                                                        />
-                                                                                    </div>
-                                                                                    <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                    <TextField
-                                                                                        label="Contact"
-                                                                                        id="standard-size-small"
-                                                                                        value={ticketContact}
-                                                                                        size="small"
-                                                                                        variant="standard"
-                                                                                        onClick={(event)=>{
-                                                                                            setTicketContact(event.target.value)
-                                                                                        }}
-                                                                                        />
-                                                                                    </div>
-                                                                                    <div className='col-xs-12 col-sm-3 col-md-3'>
-                                                                                    <Form.Group className="" controlId="formBasicEmail">
-                                                                                    <TextField
-                                                                                        label="Email"
-                                                                                        id="standard-size-small"
-                                                                                        value={ticketEmail}
-                                                                                        size="small"
-                                                                                        variant="standard"
-                                                                                        onClick={(event)=>{
-                                                                                            
-                                                                                        }}
-                                                                                        />
-                                                                                    </Form.Group>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </Card>
-                                                                </Tab>
-                                                                <Tab eventKey="profile" title="Ticket Details">
+                                                    <div className='row mt-5'  >
+                                                            <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                          
+                                                            <Tabs  className="mb-3" style={{borderColor:'black', backgroundColor:'#2e2d2a'}} >
+                                                                <Tab eventKey="home" title="Ticket Details">
                                                                 
-                                                                <Card className='shadow endTabSpace p-3'>
-                                                                              
-                                                                              <hr style={{color:'orange'}}></hr>
-                                                                              <div className='row'>
+                                                                                <Card className='p-3' style={{borderColor:'black'}}>
+                                                                                        <div className='row' >
+                                                                                            <div className='col-1'>
+                                                                                                    <IconButton color="primary"  size="small" aria-label="delete">
+                                                                                                       <AutorenewIcon/>
+                                                                                                  </IconButton>
+                                                                                            </div>
+                                                                                            <div className='col-1'>
+                                                                                                    <IconButton color="primary"  size="small" aria-label="delete">
+                                                                                                       <ArrowCircleRightIcon/>
+                                                                                                  </IconButton>
+                                                                                            </div>
+                                                                                            <div className='col-1' >
+                                                                                                    <IconButton color="primary"  size="small" aria-label="delete" >
+                                                                                                       <FileUploadIcon/>
+                                                                                                  </IconButton>
+                                                                                            </div>
+                                                                                            <div className='col-1' >
+                                                                                                    <IconButton color="primary"  size="small" aria-label="delete" >
+                                                                                                       <PrintIcon/>
+                                                                                                  </IconButton>
+                                                                                            </div>
+                                                                                            <div className='col-1' >
+                                                                                                    <IconButton color="primary"  size="small" aria-label="delete" >
+                                                                                                       <CancelIcon/>
+                                                                                                  </IconButton>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                            <hr style={{color:'orange', padding:'1px'}}></hr>
+                                                                                            <div className='row'>
+                                                                                                <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                                <TextField
+                                                                                                    label="Name"
+                                                                                                    id="standard-size-small"
+                                                                                                    value={ticketName}
+                                                                                                    size="small"
+                                                                                                    variant="standard"
+                                                                                                    onChange={(event)=>{
+                                                                                                        setTicketName(event.target.value)
+                                                                                                    }}
+                                                                                                    />
+                                                                                                        </div>
+                                                                                                        <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                                        <TextField
+                                                                                                            label="Address"
+                                                                                                            id="standard-size-small"
+                                                                                                            value={ticketAddress}
+                                                                                                            size="small"
+                                                                                                            variant="standard"
+                                                                                                            onClick={(event)=>{
+                                                                                                                setTicketAddress(event.target.value)
+                                                                                                            }}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                        <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                                        <TextField
+                                                                                                            label="Contact"
+                                                                                                            id="standard-size-small"
+                                                                                                            value={ticketContact}
+                                                                                                            size="small"
+                                                                                                            variant="standard"
+                                                                                                            onClick={(event)=>{
+                                                                                                                setTicketContact(event.target.value)
+                                                                                                            }}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                              <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                                <Form.Group className="" controlId="formBasicEmail">
+                                                                                                <TextField
+                                                                                                    label="Email"
+                                                                                                    id="standard-size-small"
+                                                                                                    value={ticketEmail}
+                                                                                                    size="small"
+                                                                                                    variant="standard"
+                                                                                                    onClick={(event)=>{
+                                                                                                        
+                                                                                                    }}
+                                                                                                    />
+                                                                                                </Form.Group>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                <div className='row mt-4'>
                                                                                   <div className='col-xs-12 col-sm-6 col-md-6'>
                                                                                   <InputLabel id="demo-simple-select-label">Description</InputLabel>
                                                                                   <TextareaAutosize
@@ -1184,7 +1245,7 @@ const handleChangePage = (event, newPage) => {
                                                                                         placeholder="Description"
                                                                                         value={ticketDescription}
                                                                                         defaultValue={ticketDescriptionDb}
-                                                                                        style={{ width: 400 }}
+                                                                                        style={{ width: 350 }}
                                                                                         />
                                                                                   </div>
                                                                                   <div className='col-xs-12 col-sm-6 col-md-6'>
@@ -1195,20 +1256,31 @@ const handleChangePage = (event, newPage) => {
                                                                                         value={ticketUpdate}
                                                                                         placeholder="Updates"
                                                                                         defaultValue={ticketUpdateDB}
-                                                                                        style={{ width: 400 }}
+                                                                                        style={{ width: 350 }}
+                                                                                        
                                                                                         />
                                                                                   </div>
                                                                                   
                                                                               </div>
-                                                                          </Card>
-
+                                                                                
+                                                                            </Card>
                                                                 </Tab>
-                                                                <Tab eventKey="contact" title="Contact">
+                                                                <Tab eventKey="profile" title="Attachments" >
+                                                                
+                                                                <Card className='shadow  p-3'>
+                                                                              
+                                                                              <hr style={{color:'orange'}}></hr>
+                                                                             
+                                                                             
+
+                                                                          </Card>
+                                                                </Tab>
+                                                                <Tab eventKey="contact" title="Support Time">
                                                                      strtong                                                         
                                                                  </Tab>
                                                                 </Tabs>
-
-                                                        </div>
+                                                              
+                                                            </div>
                                                     </div>
 
                                                 </Form> 
@@ -1341,6 +1413,8 @@ const handleChangePage = (event, newPage) => {
                                     </Col>
                                 </Row>
                       </Tab.Container>
+
+
 
 
     </div>

@@ -145,11 +145,12 @@ useEffect( ()=>{
             <Navbar/>
 
                     <div className="backgroundFormColor" >
-                        <div className="row mx-auto" style={{justifyContent:'center'}}>
-                            <div className="col-xs-12 col-sm-12 col-md-12 " style={{width:'50%'}}>
+                        <div className="row mx-auto"  style={{justifyContent:'center'}}>
+                        <div className='container'  >
+                        <div className="col-xs-6 col-sm-6 col-md-6 mx-auto " >
                             <br/>
                             <Form>
-                                <Card className="shadow mt-5 mb-5 p-5" style={{marginLeft:'10%', marginRight:'10%'}}>
+                                <Card className="shadow mt-5 mb-5 p-5" >
                                   
                                                 <h3 style={{textAlign:'center', fontWeight:'bold', fontSize:'33px'}}>Sign in as </h3>
                                                 <hr style={{color:'orange',padding:'3px'}}/>
@@ -213,7 +214,7 @@ useEffect( ()=>{
                                 </Card>
                               </Form>
                             </div>
-                            
+                        </div>
                             
                         </div>
                     </div>
