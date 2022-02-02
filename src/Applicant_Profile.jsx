@@ -33,31 +33,18 @@ import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import MenuItem from '@mui/material/MenuItem';
 
-import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import { Tabs as muiTabs} from '@mui/material/Tabs';
+import Dialog from "@mui/material/Dialog";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 
 import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import EmailIcon from '@mui/icons-material/Email';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function Applicant_Profile() {
 
@@ -261,8 +248,8 @@ export default function Applicant_Profile() {
     const [ticketReAssignedFrom, setTicketReAssignedFrom] = useState('');
     const [ticketDateClosed, setTicketDateClosed] = useState('');
     const [ticketTechnicianEmail, setTicketTechnicianEmail] = useState('');
-
-
+    const [ticketSortState, setTicketSortState] = useState('All')
+    const [ticketSortValue, setTicketSortValue] = useState('')
     const [checked, setChecked] = React.useState(false);
     
     let ticketTableIndex= 0;
@@ -367,6 +354,7 @@ export default function Applicant_Profile() {
         setQuizzPass(false);
     }
 
+    
 function captureApplication(){
     
     const headers = new Headers();
@@ -558,62 +546,66 @@ function retrieveAppplications(){
 
  function retrieveTechnicianTickets(){
 
-              Axios.post("http://localhost:3001/getTechnicianTickets",{
-                 USER_EMAIL:UserEmail_Variable,
-                                          
-               }).then((response)=>{
-                setTicketData(response.data)
-             })
-}
-
-function setTicketDataToTable(){
-    
-    return( 
-         ticketData.map((row)=>(
-            <TableRow 
-                    key={row.ticket_id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    onClick={(event)=>{
-                         
-                            let temp = event.currentTarget.outerText;
-                            temp = temp.substring(0,1).trim();
-                            ticketTableIndex = temp;
-                            console.log(ticketTableIndex)
-
-                            displayTicket(ticketTableIndex)
-                           }}
-                   >
-                        <TableCell component="th" scope="row" align="left">{row.ticket_id}</TableCell>
-                        <TableCell align="left">{row.name}</TableCell>
-                        <TableCell align="left">{row.description}</TableCell>
-                        <TableCell align="left">{row.address}</TableCell>
-                        <TableCell align="left">{row.email}</TableCell>
-                        <TableCell align="left">{row.contact}</TableCell>
-                        <TableCell align="left"> 
-                    <FormControlLabel id='displayToggleBtn' 
-                        label="" control={<Switch checked={checked}  />} 
-                     
-                    />
-                </TableCell>
-            </TableRow>
-            
- )))
-}
-
-function retrieveAllTechnicianTickets(){
-
-    try{
-
-        Axios.post("http://localhost:3001/getAllTechnicianTickets",{
-            USER_EMAIL:UserEmail_Variable                     
-          }).then((response)=>{
-           
-        })
-
-    }catch{
-
+    if(ticketSortState==='ID')
+    {
+        if(ticketSortValue.length>0)
+        {
+            Axios.post("http://localhost:3001/getSpecificTicketSortID",{
+                TicketID:  ticketSortValue                  
+                }).
+                then((response)=>{
+                 setTicketData(response.data)
+                 console.log(response.data)
+            })
+        }
+     
     }
+        if(ticketSortState==='My Tickets')
+        {
+            Axios.post("http://localhost:3001/getAllTechnicianTickets",{
+            USER_EMAIL:UserEmail_Variable                     
+            }).
+            then((response)=>{
+             setTicketData(response.data)
+             console.log(response.data)
+        })
+        }
+        if(ticketSortState==='Engineer Name')
+        {
+            if(ticketSortValue.length>0)
+            {
+                Axios.post("http://localhost:3001/getAllTechnicianTickets", {
+                    USER_EMAIL:ticketSortValue  
+                }).then((response)=>{
+                        setTicketData(response.data)
+                })
+            }
+         
+        }
+        if(ticketSortState==='Customer Name')
+        {
+            
+            if(ticketSortValue.length>0)
+            {
+                Axios.post("http://localhost:3001/getSearchTicketResults", {
+                    USER_Name:ticketSortValue  
+                }).then((response)=>{
+                        setTicketData(response.data)
+                })
+            }
+        }
+        if(ticketSortState==='All')
+        {
+            Axios.get("http://localhost:3001/getAllTickets").then((response)=>{
+                setTicketData(response.data)
+
+                console.log(response.data)
+             })
+        }
+
+            
 }
+
 
 function retrieveSearchTicketResults(){
 
@@ -648,10 +640,8 @@ function displayTicket(index){
         setTicketTechnicianEmail(response.data[0].Technician_Email_ID);
         setTicketDateClosed(response.data[0].Date_Closed);
        
-       
        // ticketCatagoryDB=response.data[0].Catagory;
 
-        
 
     }).then(()=>{
          setTicketId(index);
@@ -663,14 +653,14 @@ function displayTicket(index){
 }
 
 const [page, setPage] = React.useState(0);
-const [rowsPerPage, setRowsPerPage] = React.useState(2);
+const [rowsPerPage, setRowsPerPage] = React.useState(3);
 
 const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 2));
+    setRowsPerPage(parseInt(event.target.value, 3));
     setPage(0);
   };
 
@@ -680,6 +670,34 @@ const handleChangePage = (event, newPage) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+
+  //Dialog Box states and handlers
+  const [open, setOpen] = useState(false);
+
+         const handleClickToOpen = () => {
+            setOpen(true);
+          };
+          
+          const handleToClose = () => {
+            setOpen(false);
+          };
+          
+
+const [allTickets, setAllTicket] = useState('');
+
+function getAllTicketsData()
+{
+    Axios.get("http://localhost:3001/getAllTickets").then((response)=>{
+
+        setAllTicket(response.data)
+
+        console.log(allTickets.length)
+
+    })
+}
+
+
 
     return (
     <div>
@@ -712,8 +730,9 @@ const handleChangePage = (event, newPage) => {
                                         <Nav.Item>
                                              <Nav.Link style={{color:'#474747'}} onClick={
                                                  ()=>{
-                                                    retrieveTechnicianTickets()
-                                                    retrieveAllTechnicianTickets()
+                                                   retrieveTechnicianTickets()
+                                                  //  retrieveAllTechnicianTickets()
+                                                
                                                  }
                                                 
                                                  }
@@ -1025,46 +1044,154 @@ const handleChangePage = (event, newPage) => {
 
                                                     <div className='row mt-2'>
                                                         <div className='col-xs-12 col-sm-12 col-md-12'>
-                                                            <Card className='p-1 endTabSpace'>
-                                                                <div className='row'>
+                                                            <Card className='p-1' style={{borderColor:'black'}}>
+                                                                <div className='row' style={{borderColor:'black'}}>
                                                                 
-                                                                        <div className='col-xs-12 col-sm-12 col-md-12'>
-                                                                        <IconButton  aria-label="delete">
-                                                                           <AutorenewIcon/>
-                                                                        </IconButton>
-                                                                        <TextField id="search" size='small' style={{display:'inline-flex'}} label="Search field" type="search" />
-                                                                          
-                                                                                      <Select
-                                                                                            labelId="demo-simple-select-label"
-                                                                                            id="demo-simple-select"
-                                                                                            value="Open"
-                                                                                            label="Status"
-                                                                                            size='small'
-                                                                                            className="px-4"
-                                                                                            >
-                                                                                          <MenuItem value="Open">Call ID</MenuItem>
-                                                                                          <MenuItem value="Pending">Engineer Name</MenuItem>
-                                                                                          <MenuItem value="Closed">Customer Name</MenuItem>
-                                                                                      </Select>
+                                                                        <div className='col-xs-12 col-sm-6 col-md-6'>
 
-                                                                                      <IconButton aria-label="search">
-                                                                                            <SearchSharpIcon/>
+                                                                                   
+                                                                                                <IconButton className='mx-1' size='small' color='warning' aria-label="refresh">
+                                                                                                <AutorenewIcon onClick={retrieveTechnicianTickets}/>
+                                                                                                </IconButton>
+                                                                                  
+                                                                                        <IconButton  className='mx-1' size='small' color='warning' aria-label="print tickets">
+                                                                                                <PrintIcon/>
+                                                                                        </IconButton>
+                                                                                  
+                                                                                    <IconButton  className='mx-1' size='small' color='warning' aria-label="back">
+                                                                                            <EmailIcon/>
                                                                                       </IconButton>
+                                                                                   
+                                                                                    <IconButton  className='mx-1' size='small' color='warning' aria-label="foward">
+                                                                                            <FileDownloadIcon/>
+                                                                                      </IconButton>
+
+                                                                                      <IconButton  className='mx-1' size='small' color='warning' aria-label="foward">
+                                                                                            <AddCircleIcon onClick={handleClickToOpen}/>
+
+                                                                                            <Dialog open={open} onClose={handleToClose} maxWidth={'xl'}>
+                                                                                                            <DialogTitle>{"Adding A New Ticket"}</DialogTitle>
+                                                                                                                <DialogContent>
+                                                                                                                 
+
+                                                                                                                    <div className='row'>
+                                                                                                                        <div className='col-xs-12 col-sm-4 col-md-4'>
+                                                                                                                        <TextField
+                                                                                                                            autoFocus
+                                                                                                                            margin="dense"
+                                                                                                                            id="name"
+                                                                                                                            label="Full Name"
+                                                                                                                            type="Name"
+                                                                                                                            required={true}
+                                                                                                                            fullWidth
+                                                                                                                            variant="standard"
+                                                                                                                        />
+                                                                                                                        </div>
+                                                                                                                        <div className='col-xs-12 col-sm-4 col-md-4'>
+                                                                                                                        <TextField
+                                                                                                                            autoFocus
+                                                                                                                            margin="dense"
+                                                                                                                            id="name"
+                                                                                                                            label="Email Address"
+                                                                                                                            required={true}
+                                                                                                                            type="email"
+                                                                                                                            fullWidth
+                                                                                                                            variant="standard"
+                                                                                                                        />
+                                                                                                                        </div>
+                                                                                                                        <div className='col-xs-12 col-sm-4 col-md-4'>
+                                                                                                                        <TextField
+                                                                                                                            autoFocus
+                                                                                                                            margin="dense"
+                                                                                                                            id="name"
+                                                                                                                            label="Contact"
+                                                                                                                            required={true}
+                                                                                                                            type="Type"
+                                                                                                                            fullWidth
+                                                                                                                            variant="standard"
+                                                                                                                        />
+                                                                                                                        </div>
+                                                                                                                        
+                                                                                                                    </div>
+                                                                                                                    <div className='row mt-3'>
+                                                                                                                        <div className='col-xs-12 col-sm-4 col-md-4'>
+                                                                                                                        <TextField
+                                                                                                                            id="outlined-multiline-static"
+                                                                                                                            label="Description"
+                                                                                                                            required={true}
+                                                                                                                            multiline
+                                                                                                                            rows={4}
+                                                                                                                            defaultValue="e.g PC Crashed"
+                                                                                                                            />
+                                                                                                                        </div>
+                                                                                                                        <div className='col-xs-12 col-sm-4 col-md-4'>
+                                                                                                                        <TextField
+                                                                                                                            id="outlined-multiline-static"
+                                                                                                                            label="Physical Address"
+                                                                                                                            placeholder='24 Umhlanga Drive'
+                                                                                                                            multiline
+                                                                                                                            rows={4}
+                                                                                                                            
+                                                                                                                            />
+                                                                                                                        </div>
+                                                                                                                        <div className='col-xs-12 col-sm-4 col-md-4'>
+                                                                                                                        <TextField
+                                                                                                                            id="datetime-local"
+                                                                                                                            label="Today's Date"
+                                                                                                                            type="datetime-local"
+                                                                                                                            defaultValue="2017-05-24T10:30"
+                                                                                                                            sx={{ width: 250 }}
+                                                                                                                            InputLabelProps={{
+                                                                                                                            shrink: true,
+                                                                                                                            }}
+                                                                                                                        />
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                </DialogContent>
+                                                                                                           
+                                                                                                        </Dialog>
+                                                                                                     </IconButton>
+                                                                                  
+                                                                            </div>
+                                                                            <div className='col-xs-12 col-sm-6 col-md-6'>
+
+                                                                                    <div style={{ display:'inline-flex'}}>
+                                                                                    <TextField id="search" size='small' style={{display:'inline-flex'}} label="Search field" type="search"
+                                                                                     onChange={(event)=>{
+                                                                                        setTicketSortValue(event.target.value)
+                                                                                    }} />
+                                                                          
+                                                                                            <Select
+                                                                                            onChange={(event)=>{
+                                                                                                    setTicketSortState(event.target.value)
+                                                                                            } 
+                                                                                            }
+                                                                                                    labelId="demo-simple-select-label"
+                                                                                                    id="demo-simple-select"
+                                                                                                    defaultValue="Open"
+                                                                                                    label="Status"
+                                                                                                    size='small'
+                                                                                                    className="px-4"
+                                                                                                    style={{marginRight:'40px'}}
+                                                                                                    >
+                                                                                                <MenuItem value="ID">Ticket No</MenuItem>
+                                                                                                <MenuItem value="Engineer Name">Engineer Name</MenuItem>
+                                                                                                <MenuItem value="Customer Name">Customer Name</MenuItem>
+                                                                                                <MenuItem value="My Tickets">My Tickets</MenuItem>
+                                                                                                <MenuItem value="All"  >All Tickets</MenuItem>
+                                                                                            </Select>
+
+                                                                                            <IconButton size='small' color='warning' aria-label="search">
+                                                                                                    <SearchSharpIcon  onClick={retrieveTechnicianTickets}/>
+                                                                                            </IconButton>
+                                                                                    </div>
+                                                                                    
+                                                                                   
 
                                                                                     <div className='mx-3' style={{float:'right'}}>
                                                                                     
-                                                                                      <IconButton style={{marginRight:'40px'}} aria-label="print tickets">
-                                                                                            <PrintIcon/>
-                                                                                      </IconButton>
-                                                                                    
-                                                                                    
-                                                                                      <IconButton aria-label="back">
-                                                                                            <ArrowBackIcon/>
-                                                                                      </IconButton>
-
-                                                                                    <IconButton aria-label="foward">
-                                                                                            <ArrowForwardIcon/>
-                                                                                      </IconButton>
+                                                                                     
                                                                                     </div>
                                                                         
                                                                         </div>
@@ -1076,10 +1203,10 @@ const handleChangePage = (event, newPage) => {
 
                                                     <div className="row mt-2" >
                                                         <div className="col-xs-12 col-sm-12 col-md-12">
-                                                            <div className=""  >
+                                                           
                                                             <div className="row mt-4">
-                                                                <div className="col-xs-12 col-sm-12 col-md-12" className='p-1' style={{backgroundColor:'grey',overflowY:'scroll'}}>
-                                                                  
+                                                                <div className="col-xs-12 col-sm-12 col-md-12" className='p-1' style={{backgroundColor:'#cacfd9',overflowY:'scroll', maxHeight:'400px'}}>
+                                                                <Paper sx={{ width: '100%', mb: 1 }}>
                                                                     <TableContainer component={Paper} >
                                                                         <Table stickyHeader sx={{ minWidth: 650 }}  size="small" aria-label="sticky table">
                                                                             <TableHead stickyHeader style={{backgroundColor:'black'}}>
@@ -1094,13 +1221,16 @@ const handleChangePage = (event, newPage) => {
                                                                                 </TableRow>
                                                                             </TableHead>
                                                                                 <TableBody>
-                                                                                {ticketData
+                                                                                {
+                                                                                   
+                                                                                    
+                                                                                    ticketData
                                                                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                                                         .map((row, index) => {
                                                                                            console.log(row);
                                                                                            return( 
                                                                                                
-                                                                                               <TableRow hover key={row.ticket_id}
+                                                                                               <TableRow hover key={row.Ticket_ID}
                                                                                                 onClick={(event)=>{
                          
                                                                                                         let temp = event.currentTarget.outerText;
@@ -1111,12 +1241,12 @@ const handleChangePage = (event, newPage) => {
                                                                                                         displayTicket(ticketTableIndex)
                                                                                                         }}>
 
-                                                                                            <TableCell component="th" scope="row" align="left">{row.ticket_id}</TableCell>
-                                                                                                <TableCell align="left">{row.name}</TableCell>
-                                                                                                <TableCell align="left">{row.description}</TableCell>
-                                                                                                <TableCell align="left">{row.address}</TableCell>
-                                                                                                <TableCell align="left">{row.email}</TableCell>
-                                                                                                <TableCell align="left">{row.contact}</TableCell>
+                                                                                            <TableCell component="th" scope="row" align="left">{row.Ticket_ID}</TableCell>
+                                                                                                <TableCell align="left">{row.Name}</TableCell>
+                                                                                                <TableCell align="left">{row.Description}</TableCell>
+                                                                                                <TableCell align="left">{row.Address}</TableCell>
+                                                                                                <TableCell align="left">{row.Email}</TableCell>
+                                                                                                <TableCell align="left">{row.Contact}</TableCell>
                                                                                                
 
                                                                                             </TableRow>);
@@ -1128,59 +1258,69 @@ const handleChangePage = (event, newPage) => {
                                                                                
                                                                         </Table>
                                                                      
-                                                                       
-                                                                        <TablePagination 
-                                                                               
-                                                                                rowsPerPageOptions={[2, 25, 100]}
+                                                                    </TableContainer>
+                                                                   
+                                                                    <TablePagination 
+                                                                               style={{margin: 0 }}
+                                                                                rowsPerPageOptions={[3, 25, 100]}
                                                                                 component="div"
                                                                                 color="primary"
+                                                                                size='small'
                                                                                 count={ticketData.length}
                                                                                 rowsPerPage={rowsPerPage}
                                                                                 page={page}
                                                                                 onPageChange={handleChangePage}
                                                                               //  onRowsPerPageChange={handleChangeRowsPerPage}
                                                                             />
-                                                                    </TableContainer>
+
+                                                                                </Paper>
                                                                    
                                                                 </div>
                                                             </div>  
-                                                            </div>
+                                                      
                                                         </div>
                                                     </div>
 
                                                     <div className='row mt-5'  >
-                                                            <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                            <div className='col-xs-12 col-sm-12 col-md-12' >
                                                           
-                                                            <Tabs  className="mb-3" style={{borderColor:'black', backgroundColor:'#2e2d2a'}} >
-                                                                <Tab eventKey="home" title="Ticket Details">
+                                                            <Tabs  className="mb-3" style={{borderColor:'black', backgroundColor:'#2e4dc9'}} >
+                                                                <Tab eventKey="home" title="Ticket Details"  >
                                                                 
                                                                                 <Card className='p-3' style={{borderColor:'black'}}>
                                                                                         <div className='row' >
-                                                                                            <div className='col-1'>
-                                                                                                    <IconButton color="primary"  size="small" aria-label="delete">
-                                                                                                       <AutorenewIcon/>
-                                                                                                  </IconButton>
-                                                                                            </div>
-                                                                                            <div className='col-1'>
-                                                                                                    <IconButton color="primary"  size="small" aria-label="delete">
-                                                                                                       <ArrowCircleRightIcon/>
-                                                                                                  </IconButton>
-                                                                                            </div>
-                                                                                            <div className='col-1' >
-                                                                                                    <IconButton color="primary"  size="small" aria-label="delete" >
-                                                                                                       <FileUploadIcon/>
-                                                                                                  </IconButton>
-                                                                                            </div>
-                                                                                            <div className='col-1' >
-                                                                                                    <IconButton color="primary"  size="small" aria-label="delete" >
-                                                                                                       <PrintIcon/>
-                                                                                                  </IconButton>
-                                                                                            </div>
-                                                                                            <div className='col-1' >
-                                                                                                    <IconButton color="primary"  size="small" aria-label="delete" >
+                                                                                            <div className='col-xs-6 col-sm-6 col-md-6'>
+                                                                                            <IconButton color="primary"   aria-label="delete">
+                                                                                                        <AutorenewIcon/>
+                                                                                                    </IconButton>
+                                                                                             
+                                                                                             
+                                                                                                        <IconButton color="primary"  aria-label="delete">
+                                                                                                        <ArrowCircleRightIcon/>
+                                                                                                    </IconButton>
+                                                                                               
+                                                                                              
+                                                                                                        <IconButton color="primary"   aria-label="delete" >
+                                                                                                        <FileUploadIcon/>
+                                                                                                    </IconButton>
+                                                                                              
+                                                                                                
+                                                                                                        <IconButton color="primary" aria-label="delete" >
+                                                                                                        <PrintIcon/>
+                                                                                                    </IconButton>
+                                                                                               
+                                                                                                
+                                                                                                        <IconButton color="primary" aria-label="delete" >
+                                                                                                        <EmailIcon/>
+                                                                                                    </IconButton>
+                                                                                               
+
+                                                                                           
+                                                                                                    <IconButton color="primary"  aria-label="delete" >
                                                                                                        <CancelIcon/>
                                                                                                   </IconButton>
                                                                                             </div>
+                                                                                              
                                                                                         </div>
                                                                                             <hr style={{color:'orange', padding:'1px'}}></hr>
                                                                                             <div className='row'>
@@ -1265,7 +1405,7 @@ const handleChangePage = (event, newPage) => {
                                                                                 
                                                                             </Card>
                                                                 </Tab>
-                                                                <Tab eventKey="profile" title="Attachments" >
+                                                                <Tab eventKey="profile" title="Attachments"  >
                                                                 
                                                                 <Card className='shadow  p-3'>
                                                                               
@@ -1277,6 +1417,9 @@ const handleChangePage = (event, newPage) => {
                                                                 </Tab>
                                                                 <Tab eventKey="contact" title="Support Time">
                                                                      strtong                                                         
+                                                                 </Tab>
+                                                                 <Tab eventKey="history" title="Ticket History">
+                                                                    historyr                                                      
                                                                  </Tab>
                                                                 </Tabs>
                                                               
