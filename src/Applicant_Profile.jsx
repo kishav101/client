@@ -16,14 +16,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Fade from '@mui/material/Fade';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import IconButton from '@mui/material/IconButton';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PrintIcon from '@mui/icons-material/Print';
 import CancelIcon from '@mui/icons-material/Cancel';
 
@@ -45,6 +41,17 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+
+import Avatar from '@mui/material/Avatar';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
+import Typography from '@mui/material/Typography';
+import { blue } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
 export default function Applicant_Profile() {
 
@@ -607,17 +614,6 @@ function retrieveAppplications(){
 }
 
 
-function retrieveSearchTicketResults(){
-
-    Axios.post("http://localhost:3001/getSearchTicketResults",{
-        USER_EMAIL:UserEmail_Variable,
-        SEARCH_BY:""                      
-      }).then((response)=>{
-       console.log(response.data)
-       setSearchTickets(response.data)
-    })
-}
-
 function displayTicket(index){
 
   try{
@@ -672,15 +668,99 @@ const handleChangePage = (event, newPage) => {
   };
 
 
-  //Dialog Box states and handlers
-  const [open, setOpen] = useState(false);
+
+  const [engineerList, setEngineerList] = useState([])
+const techArr = [];
+
+
+  function getAllEngineers(){
+    
+    Axios.get("http://localhost:3001/getAllTechnicians").then((response)=>{
+            setEngineerList(response.data);
+            
+            let engineerTotal = response.data.length;
+
+            for (let i = 0; i < engineerTotal  ; i++) {
+              techArr.push(response.data[i].Email_Id);
+            
+            }
+            console.log(techArr)
+            
+    })
+}
+
+
+  const emails3 = ['username@gmail.com', 'user02@gmail.com'];
+  function SimpleDialog(props) {
+
+    const { onClose, selectedValue, open } = props;
+  
+    const handleClose = () => {
+      onClose(selectedValue);
+    };
+  
+    const handleListItemClick = (value) => {
+      onClose(value);
+    };
+  
+ 
+    return (
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle>Assign an Technician</DialogTitle>
+        <List sx={{ pt: 0 }}>
+          {
+
+
+          engineerList.map(( engineerList, index) => (
+          <ListItem button onClick={() => handleListItemClick( engineerList)} key={engineerList.Email_Id}>
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                <PersonIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={ engineerList.Email_Id} />
+          </ListItem>
+        ))
+                     
+
+
+            }
+  
+         
+        </List>
+      </Dialog>
+    );
+  }
+  
+  SimpleDialog.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
+  };
+
+
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(techArr[0]);
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+
+  //Add_Dialog Box states and handlers
+  const [open1, setOpen1] = useState(false);
 
          const handleClickToOpen = () => {
-            setOpen(true);
+            setOpen1(true);
           };
           
           const handleToClose = () => {
-            setOpen(false);
+            setOpen1(false);
           };
           
 
@@ -731,8 +811,7 @@ function getAllTicketsData()
                                              <Nav.Link style={{color:'#474747'}} onClick={
                                                  ()=>{
                                                    retrieveTechnicianTickets()
-                                                  //  retrieveAllTechnicianTickets()
-                                                
+                                                   getAllEngineers()
                                                  }
                                                 
                                                  }
@@ -1067,9 +1146,13 @@ function getAllTicketsData()
                                                                                       </IconButton>
 
                                                                                       <IconButton  className='mx-1' size='small' color='warning' aria-label="foward">
-                                                                                            <AddCircleIcon onClick={handleClickToOpen}/>
+                                                                                            <AddCircleIcon onClick={()=>{
+                                                                                               getAllEngineers()
+                                                                                                handleClickToOpen()
+                                                                                              
+                                                                                            }}/>
 
-                                                                                            <Dialog open={open} onClose={handleToClose} maxWidth={'xl'}>
+                                                                                            <Dialog open={open1} onClose={handleToClose} maxWidth={'xl'}>
                                                                                                             <DialogTitle>{"Adding A New Ticket"}</DialogTitle>
                                                                                                                 <DialogContent>
                                                                                                                  
@@ -1147,7 +1230,18 @@ function getAllTicketsData()
                                                                                                                         />
                                                                                                                         </div>
                                                                                                                     </div>
+                                                                                                                    
 
+                                                                                                                    <div className='row'>
+                                                                                                                    <Button variant="outlined" onClick={handleClickOpen}>
+                                                                                                                        Open simple dialog
+                                                                                                                    </Button>
+                                                                                                                    <SimpleDialog
+                                                                                                                        selectedValue={selectedValue}
+                                                                                                                        open={open}
+                                                                                                                        onClose={handleClose}
+                                                                                                                    />
+                                                                                                                    </div>
                                                                                                                 </DialogContent>
                                                                                                            
                                                                                                         </Dialog>
