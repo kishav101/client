@@ -12,6 +12,7 @@ import Axios from 'axios'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import TextField from '@mui/material/TextField';
 
+
 export default function Login() {
 
 let navigate = useNavigate();
@@ -133,9 +134,11 @@ useEffect( ()=>{
 
     if(GoogleEmail !== ""){
         document.cookie = `usernameCookie= ${GoogleEmail}; `;
+        alert(GoogleEmail)
     }
     else{
         document.cookie = `usernameCookie= ${userEmail};`;
+        alert(userEmail)
     }
     
    }

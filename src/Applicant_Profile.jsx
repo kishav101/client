@@ -258,6 +258,28 @@ export default function Applicant_Profile() {
     const [ticketSortState, setTicketSortState] = useState('All')
     const [ticketSortValue, setTicketSortValue] = useState('')
     const [checked, setChecked] = React.useState(false);
+
+
+    //------------------- New Ticket States--------------------
+
+    const [newTicketName, setNewTicketName] = useState('')
+    const [newTicketAddress, setNewTicketAddress] = useState('')
+    const [newTicketDescription, setNewTicketDescription] = useState('')
+    const [newTicketEmail, setNewTicketEmail] = useState('')
+    const [newTicketContact, setNewTicketContact] = useState('')
+    const [newTicketDateTime, setNewTicketDateTime] = useState('')
+    const [newTicketAssignedTech, setNewTicketAssignedTech] = useState('')
+    const [newTicketRemote, setNewTicketRemote] = useState('')
+    
+    const [newTicketTechnicianTime, setNewTicketTechnicianTime] = useState('')
+    
+
+    const [ticketHistory, setTicketHistory] = useState([])
+
+    
+    const [ticketHistoryList, setTicketHistoryList] = useState('')
+
+
     
     let ticketTableIndex= 0;
 
@@ -440,7 +462,7 @@ function UpdateSkillsCompentencies(){
     headers.append("Content-Type", "application/json");
 
     Axios.post("http://localhost:3001/getUserCvData",{
-            USER_EMAIL:UserEmail_Variable
+            USER_EMAIL:"kishav527@gmail.com"
         }).then((response)=>{
             console.log(response);
 
@@ -632,7 +654,7 @@ function displayTicket(index){
         setTicketSolution(response.data[0].Solution);
         setTicketStatus(response.data[0].Status);
         setTicketTimeAssigned(response.data[0].Time_Assigned)
-        setTicketUpdate(response.data[0].Update);
+        setTicketUpdate(response.data[0].Updates);
         setTicketTechnicianEmail(response.data[0].Technician_Email_ID);
         setTicketDateClosed(response.data[0].Date_Closed);
        
@@ -649,10 +671,18 @@ function displayTicket(index){
 }
 
 const [page, setPage] = React.useState(0);
+const [historyLogPage, setHistoryLogPage] = React.useState(0);
 const [rowsPerPage, setRowsPerPage] = React.useState(3);
+const [historyLogRowsPerPage, setHistoryLogRowsPerPage] = React.useState(3);
+
+
 
 const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+
+  const handleChangePageHistoryLog = (event, newPageHistory) => {
+    setPage(newPageHistory);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -669,7 +699,8 @@ const handleChangePage = (event, newPage) => {
 
 
 
-  const [engineerList, setEngineerList] = useState([])
+const [engineerList, setEngineerList] = useState([]);
+const [selectedTech, setSelectedTech] = useState('')
 const techArr = [];
 
 
@@ -684,7 +715,7 @@ const techArr = [];
               techArr.push(response.data[i].Email_Id);
             
             }
-            console.log(techArr)
+        
             
     })
 }
@@ -706,24 +737,19 @@ const techArr = [];
  
     return (
       <Dialog onClose={handleClose} open={open}>
-        <DialogTitle>Assign an Technician</DialogTitle>
+        <DialogTitle>Assign a Technician</DialogTitle>
         <List sx={{ pt: 0 }}>
           {
-
-
-          engineerList.map(( engineerList, index) => (
-          <ListItem button onClick={() => handleListItemClick( engineerList)} key={engineerList.Email_Id}>
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={ engineerList.Email_Id} />
-          </ListItem>
-        ))
-                     
-
-
+                engineerList.map(( engineerList, index) => (
+                <ListItem button onClick={() => handleListItemClick( engineerList.Email_Id)} key={engineerList.Email_Id}>
+                    <ListItemAvatar>
+                    <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                        <PersonIcon />
+                    </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={ engineerList.Email_Id} />
+                </ListItem>
+                ))
             }
   
          
@@ -740,7 +766,7 @@ const techArr = [];
 
 
   const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(techArr[0]);
+  const [selectedValue, setSelectedValue] = React.useState(emails3[0]);
 
 
   const handleClickOpen = () => {
@@ -749,33 +775,129 @@ const techArr = [];
 
   const handleClose = (value) => {
     setOpen(false);
-    setSelectedValue(value);
+   setSelectedValue(value);
+   
+   // console.log(value);
   };
 
   //Add_Dialog Box states and handlers
   const [open1, setOpen1] = useState(false);
 
-         const handleClickToOpen = () => {
+         const handleClickToOpen1 = () => {
             setOpen1(true);
           };
           
-          const handleToClose = () => {
+          const handleToClose1 = () => {
             setOpen1(false);
           };
           
+    
+function getCurrentDateTime(){
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    let yyyy = today.getFullYear();
 
-const [allTickets, setAllTicket] = useState('');
+    let hh = String(today.getHours()).padStart(2, '0');
+    let min = String(today.getMinutes()).padStart(2, '0'); 
+    
+    
+    today = yyyy + '-' + mm + '-' + dd+" "+hh+":"+min;
 
-function getAllTicketsData()
-{
-    Axios.get("http://localhost:3001/getAllTickets").then((response)=>{
-
-        setAllTicket(response.data)
-
-        console.log(allTickets.length)
-
-    })
+    return today
 }
+
+    function addNewTicketTechnician(){
+       
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+    
+        fetch('http://localhost:3001/insertNewTicketTech', {
+            method: "POST",
+            body: JSON.stringify({
+                 NAME_TICKET:newTicketName ,
+                 DESCRIPTION_TICKET:newTicketDescription,
+                 ADDRESS_TICKET:newTicketAddress,
+                 EMAIL_TICKET:newTicketEmail,
+                 CONTACT_TICKET:newTicketContact,
+                 STATUS_TICKET:"GOOD",
+                 DATETIME_TICKET:getCurrentDateTime(),
+                 TECH_EMAIL_ID:selectedValue,
+                 TIME_ASSIGNED_TICKET:getCurrentDateTime()
+                 
+                 }),
+            headers
+            });
+    }
+
+    function updateTicket(){
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+    
+        fetch('http://localhost:3001/updateTicketRecord', {
+            method: "POST",
+            body: JSON.stringify({
+                 TICKETUPDATE_ID:ticketId,
+                 UPDATE:ticketUpdate,
+                 }),
+            headers
+            });
+        
+    }
+
+    function updateTicketLogs(){
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+    
+        fetch('http://localhost:3001/insertUpdateTicketLogs', {
+            method: "POST",
+            body: JSON.stringify({
+                 TICKETUPDATE_ID:ticketId,
+                 UPDATE:ticketUpdate,
+                 TIMESTAMP:getCurrentDateTime(),
+                 TECH:UserEmail_Variable
+                 }),
+            headers
+            });
+        
+    }
+
+    function fillTicketHistoryList(index){
+
+        try{
+           
+                Axios.post("http://localhost:3001/getAllTicketLogHistory", {
+                    TICKET_INDEX:index
+                }).then((response)=>{
+                    console.log(response.data)
+                    setTicketHistoryList(response.data);
+                })
+        }
+        catch{
+
+        }
+    }
+
+    function ticketHistoryTable(){
+
+                ticketHistoryList
+                .slice(historyLogPage* historyLogRowsPerPage, historyLogPage * historyLogRowsPerPage + historyLogRowsPerPage).map((row, index)=>{
+                        return(
+
+                            <TableRow hover key={row.ticket_log_id}>
+                                <TableCell  component="th" scope="row" align="left">{row.Ticket_ID}</TableCell>
+                                <TableCell align="left">{row.Technician_Email}</TableCell>
+                                <TableCell align="left">{row.Description}</TableCell>
+                                <TableCell align="left">{row.DateTime}</TableCell>
+                                                                                              
+                            </TableRow>
+
+                        );
+                })
+
+    }
 
 
 
@@ -1124,36 +1246,36 @@ function getAllTicketsData()
                                                     <div className='row mt-2'>
                                                         <div className='col-xs-12 col-sm-12 col-md-12'>
                                                             <Card className='p-1' style={{borderColor:'black'}}>
-                                                                <div className='row' style={{borderColor:'black'}}>
+                                                                <div className='row mt-1 mb-1' style={{borderColor:'black'}}>
                                                                 
                                                                         <div className='col-xs-12 col-sm-6 col-md-6'>
 
                                                                                    
-                                                                                                <IconButton className='mx-1' size='small' color='warning' aria-label="refresh">
+                                                                                                <IconButton className='mx-1'  color='warning' aria-label="refresh">
                                                                                                 <AutorenewIcon onClick={retrieveTechnicianTickets}/>
                                                                                                 </IconButton>
                                                                                   
-                                                                                        <IconButton  className='mx-1' size='small' color='warning' aria-label="print tickets">
+                                                                                        <IconButton  className='mx-1'  color='warning' aria-label="print tickets">
                                                                                                 <PrintIcon/>
                                                                                         </IconButton>
                                                                                   
-                                                                                    <IconButton  className='mx-1' size='small' color='warning' aria-label="back">
+                                                                                    <IconButton  className='mx-1'  color='warning' aria-label="back">
                                                                                             <EmailIcon/>
                                                                                       </IconButton>
                                                                                    
-                                                                                    <IconButton  className='mx-1' size='small' color='warning' aria-label="foward">
+                                                                                    <IconButton  className='mx-1'  color='warning' aria-label="foward">
                                                                                             <FileDownloadIcon/>
                                                                                       </IconButton>
 
-                                                                                      <IconButton  className='mx-1' size='small' color='warning' aria-label="foward">
+                                                                                      <IconButton  className='mx-1' color='warning' aria-label="foward">
                                                                                             <AddCircleIcon onClick={()=>{
                                                                                                getAllEngineers()
-                                                                                                handleClickToOpen()
+                                                                                                handleClickToOpen1()
                                                                                               
                                                                                             }}/>
 
-                                                                                            <Dialog open={open1} onClose={handleToClose} maxWidth={'xl'}>
-                                                                                                            <DialogTitle>{"Adding A New Ticket"}</DialogTitle>
+                                                                                            <Dialog open={open1} onClose={handleToClose1} maxWidth={'xl'}>
+                                                                                                            <DialogTitle>{"New Ticket"}</DialogTitle>
                                                                                                                 <DialogContent>
                                                                                                                  
 
@@ -1165,6 +1287,10 @@ function getAllTicketsData()
                                                                                                                             id="name"
                                                                                                                             label="Full Name"
                                                                                                                             type="Name"
+                                                                                                                            size='small'
+                                                                                                                            onChange={(event)=>{
+                                                                                                                                    setNewTicketName(event.target.value);
+                                                                                                                            }}          
                                                                                                                             required={true}
                                                                                                                             fullWidth
                                                                                                                             variant="standard"
@@ -1176,8 +1302,12 @@ function getAllTicketsData()
                                                                                                                             margin="dense"
                                                                                                                             id="name"
                                                                                                                             label="Email Address"
+                                                                                                                            size='small'
                                                                                                                             required={true}
                                                                                                                             type="email"
+                                                                                                                            onChange={(event)=>{
+                                                                                                                                    setNewTicketEmail(event.target.value);
+                                                                                                                            }} 
                                                                                                                             fullWidth
                                                                                                                             variant="standard"
                                                                                                                         />
@@ -1188,8 +1318,12 @@ function getAllTicketsData()
                                                                                                                             margin="dense"
                                                                                                                             id="name"
                                                                                                                             label="Contact"
+                                                                                                                            size='small'
                                                                                                                             required={true}
                                                                                                                             type="Type"
+                                                                                                                            onChange={(event)=>{
+                                                                                                                                    setNewTicketContact(event.target.value);
+                                                                                                                            }} 
                                                                                                                             fullWidth
                                                                                                                             variant="standard"
                                                                                                                         />
@@ -1202,7 +1336,11 @@ function getAllTicketsData()
                                                                                                                             id="outlined-multiline-static"
                                                                                                                             label="Description"
                                                                                                                             required={true}
+                                                                                                                            size='small'
                                                                                                                             multiline
+                                                                                                                            onChange={(event)=>{
+                                                                                                                                    setNewTicketDescription(event.target.value);
+                                                                                                                            }} 
                                                                                                                             rows={4}
                                                                                                                             defaultValue="e.g PC Crashed"
                                                                                                                             />
@@ -1212,35 +1350,66 @@ function getAllTicketsData()
                                                                                                                             id="outlined-multiline-static"
                                                                                                                             label="Physical Address"
                                                                                                                             placeholder='24 Umhlanga Drive'
+                                                                                                                            size='small'
+                                                                                                                            onChange={(event)=>{
+                                                                                                                                    setNewTicketAddress(event.target.value);
+                                                                                                                            }} 
                                                                                                                             multiline
                                                                                                                             rows={4}
                                                                                                                             
                                                                                                                             />
                                                                                                                         </div>
                                                                                                                         <div className='col-xs-12 col-sm-4 col-md-4'>
-                                                                                                                        <TextField
-                                                                                                                            id="datetime-local"
-                                                                                                                            label="Today's Date"
-                                                                                                                            type="datetime-local"
-                                                                                                                            defaultValue="2017-05-24T10:30"
-                                                                                                                            sx={{ width: 250 }}
-                                                                                                                            InputLabelProps={{
-                                                                                                                            shrink: true,
-                                                                                                                            }}
-                                                                                                                        />
+                                                                                                                             <Button variant='contained' color='info' size='small' onClick={handleClickOpen}>
+                                                                                                                                Select Technician
+                                                                                                                            </Button>
                                                                                                                         </div>
                                                                                                                     </div>
                                                                                                                     
 
-                                                                                                                    <div className='row'>
-                                                                                                                    <Button variant="outlined" onClick={handleClickOpen}>
-                                                                                                                        Open simple dialog
-                                                                                                                    </Button>
-                                                                                                                    <SimpleDialog
-                                                                                                                        selectedValue={selectedValue}
-                                                                                                                        open={open}
-                                                                                                                        onClose={handleClose}
-                                                                                                                    />
+                                                                                                                    <div className='row mt-2'>
+                                                                                                                            <div className='col-xs-12 col-sm-4 col-md-4'>
+                                                                                                                           
+                                                                                                                            <Typography variant="subtitle1" component="div" >
+                                                                                                                             
+                                                                                                                            </Typography>
+
+                                                                                                                            <TextField
+                                                                                                                            autoFocus
+                                                                                                                            margin="dense"
+                                                                                                                            id="name"
+                                                                                                                            label="Selected technician"
+                                                                                                                            size='small'
+                                                                                                                            required={true}
+                                                                                                                            type="Text"
+                                                                                                                            value={selectedValue}
+                                                                                                                            onChange={(event)=>{
+                                                                                                                                setNewTicketAssignedTech(event.target.value);
+                                                                                                                            }} 
+                                                                                                                            fullWidth
+                                                                                                                            variant="standard"
+                                                                                                                        />
+
+                                                                                                                            <SimpleDialog
+                                                                                                                                selectedValue={selectedValue}
+                                                                                                                                
+                                                                                                                                open={open}
+                                                                                                                                onClose={handleClose}
+                                                                                                                                
+                                                                                                                                 />                                                                       
+                                                                                                                            </div>
+                                                                                                                            <div className=' mt-1 col-xs col-sm-4 col-md-4'>
+                                                                                                                           
+                                                                                                                            </div>
+                                                                                                                    </div>
+                                                                                                                    <hr></hr>
+                                                                                                                    <div className='row' >
+                                                                                                                            <div className='col-xs-12 col-sm-12 col-md-12' >
+                                                                                                                            <Button  variant='contained' onClick={addNewTicketTechnician} color='warning' size='small' >
+                                                                                                                                Create Ticket
+                                                                                                                            </Button>
+                                                                                                                            </div>
+                                                                                                                           
                                                                                                                     </div>
                                                                                                                 </DialogContent>
                                                                                                            
@@ -1263,11 +1432,12 @@ function getAllTicketsData()
                                                                                             }
                                                                                                     labelId="demo-simple-select-label"
                                                                                                     id="demo-simple-select"
-                                                                                                    defaultValue="Open"
+                                                                                                    value="All"
                                                                                                     label="Status"
                                                                                                     size='small'
                                                                                                     className="px-4"
                                                                                                     style={{marginRight:'40px'}}
+                                                                                                    style={{display:'inline-flex'}}
                                                                                                     >
                                                                                                 <MenuItem value="ID">Ticket No</MenuItem>
                                                                                                 <MenuItem value="Engineer Name">Engineer Name</MenuItem>
@@ -1276,18 +1446,11 @@ function getAllTicketsData()
                                                                                                 <MenuItem value="All"  >All Tickets</MenuItem>
                                                                                             </Select>
 
-                                                                                            <IconButton size='small' color='warning' aria-label="search">
+                                                                                            <IconButton  color='warning' aria-label="search">
                                                                                                     <SearchSharpIcon  onClick={retrieveTechnicianTickets}/>
                                                                                             </IconButton>
                                                                                     </div>
-                                                                                    
                                                                                    
-
-                                                                                    <div className='mx-3' style={{float:'right'}}>
-                                                                                    
-                                                                                     
-                                                                                    </div>
-                                                                        
                                                                         </div>
                                                                         
                                                                 </div>
@@ -1321,7 +1484,7 @@ function getAllTicketsData()
                                                                                     ticketData
                                                                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                                                         .map((row, index) => {
-                                                                                           console.log(row);
+                                                                                           
                                                                                            return( 
                                                                                                
                                                                                                <TableRow hover key={row.Ticket_ID}
@@ -1333,6 +1496,7 @@ function getAllTicketsData()
                                                                                                         console.log(ticketTableIndex)
 
                                                                                                         displayTicket(ticketTableIndex)
+                                                                                                        fillTicketHistoryList(ticketTableIndex)
                                                                                                         }}>
 
                                                                                             <TableCell component="th" scope="row" align="left">{row.Ticket_ID}</TableCell>
@@ -1378,8 +1542,8 @@ function getAllTicketsData()
                                                     <div className='row mt-5'  >
                                                             <div className='col-xs-12 col-sm-12 col-md-12' >
                                                           
-                                                            <Tabs  className="mb-3" style={{borderColor:'black', backgroundColor:'#2e4dc9'}} >
-                                                                <Tab eventKey="home" title="Ticket Details"  >
+                                                            <Tabs  className="mb-3"  >
+                                                                <Tab eventKey="home" title="Ticket Details"   >
                                                                 
                                                                                 <Card className='p-3' style={{borderColor:'black'}}>
                                                                                         <div className='row' >
@@ -1395,7 +1559,10 @@ function getAllTicketsData()
                                                                                                
                                                                                               
                                                                                                         <IconButton color="primary"   aria-label="delete" >
-                                                                                                        <FileUploadIcon/>
+                                                                                                        <FileUploadIcon onClick={()=>{
+                                                                                                              updateTicket()
+                                                                                                             updateTicketLogs()
+                                                                                                        }}/>
                                                                                                     </IconButton>
                                                                                               
                                                                                                 
@@ -1437,7 +1604,7 @@ function getAllTicketsData()
                                                                                                             value={ticketAddress}
                                                                                                             size="small"
                                                                                                             variant="standard"
-                                                                                                            onClick={(event)=>{
+                                                                                                            onChange={(event)=>{
                                                                                                                 setTicketAddress(event.target.value)
                                                                                                             }}
                                                                                                             />
@@ -1449,7 +1616,7 @@ function getAllTicketsData()
                                                                                                             value={ticketContact}
                                                                                                             size="small"
                                                                                                             variant="standard"
-                                                                                                            onClick={(event)=>{
+                                                                                                            onChange={(event)=>{
                                                                                                                 setTicketContact(event.target.value)
                                                                                                             }}
                                                                                                             />
@@ -1462,7 +1629,7 @@ function getAllTicketsData()
                                                                                                     value={ticketEmail}
                                                                                                     size="small"
                                                                                                     variant="standard"
-                                                                                                    onClick={(event)=>{
+                                                                                                    onChange={(event)=>{
                                                                                                         
                                                                                                     }}
                                                                                                     />
@@ -1491,6 +1658,9 @@ function getAllTicketsData()
                                                                                         placeholder="Updates"
                                                                                         defaultValue={ticketUpdateDB}
                                                                                         style={{ width: 350 }}
+                                                                                        onChange={(event)=>{
+                                                                                                setTicketUpdate(event.target.value);
+                                                                                        }}
                                                                                         
                                                                                         />
                                                                                   </div>
@@ -1499,9 +1669,9 @@ function getAllTicketsData()
                                                                                 
                                                                             </Card>
                                                                 </Tab>
-                                                                <Tab eventKey="profile" title="Attachments"  >
+                                                                <Tab eventKey="profile" title="Attachments" style={{backgroundColor:'pu'}} >
                                                                 
-                                                                <Card className='shadow  p-3'>
+                                                                         <Card className='shadow  p-3'>
                                                                               
                                                                               <hr style={{color:'orange'}}></hr>
                                                                              
@@ -1513,7 +1683,56 @@ function getAllTicketsData()
                                                                      strtong                                                         
                                                                  </Tab>
                                                                  <Tab eventKey="history" title="Ticket History">
-                                                                    historyr                                                      
+                                                                        
+                                                                      
+
+                                                                        <div className='row mt-2'>
+                                                                            <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                
+
+
+
+                                                                   <Paper sx={{ width: '100%', mb: 1, mt:2 }}>
+                                                                     <TableContainer component={Paper} >
+                                                                        <Table stickyHeader sx={{ minWidth: 650 }}  size="small" aria-label="sticky table">
+                                                                            <TableHead stickyHeader style={{backgroundColor:'black'}}>
+                                                                                <TableRow >
+                                                                                    <TableCell align="left"><b>Ticket ID</b></TableCell>
+                                                                                    <TableCell align="left"> <b>Technician</b></TableCell>
+                                                                                    <TableCell align="left"> <b>Description</b></TableCell>
+                                                                                    <TableCell align="left"><b>Time Stamp</b></TableCell>
+                                                                                  </TableRow>
+                                                                            </TableHead>
+                                                                                <TableBody>
+                                                                                   {
+                                                                                   
+                                                                                    
+                                                                                   }
+                                                                                </TableBody>
+                                                                               
+                                                                        </Table>
+                                                                     
+                                                                    </TableContainer>
+                                                                   
+                                                                    <TablePagination 
+                                                                               style={{margin: 0 }}
+                                                                                rowsPerPageOptions={[3, 25, 100]}
+                                                                                component="div"
+                                                                                color="primary"
+                                                                                size='small'
+                                                                                count={ticketData.length}
+                                                                                rowsPerPage={rowsPerPage}
+                                                                                page={page}
+                                                                                onPageChange={handleChangePage}
+                                                                              //  onRowsPerPageChange={handleChangeRowsPerPage}
+                                                                            />
+
+                                                                                </Paper>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                                                                      
                                                                  </Tab>
                                                                 </Tabs>
                                                               
