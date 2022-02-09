@@ -269,7 +269,6 @@ export default function Applicant_Profile() {
     const [newTicketContact, setNewTicketContact] = useState('')
     const [newTicketDateTime, setNewTicketDateTime] = useState('')
     const [newTicketAssignedTech, setNewTicketAssignedTech] = useState('')
-    const [newTicketRemote, setNewTicketRemote] = useState('')
     
     const [newTicketTechnicianTime, setNewTicketTechnicianTime] = useState('')
     
@@ -277,11 +276,20 @@ export default function Applicant_Profile() {
     const [ticketHistory, setTicketHistory] = useState([])
 
     
-    const [ticketHistoryList, setTicketHistoryList] = useState('')
+    const [ticketHistoryList, setTicketHistoryList] = useState([])
+
+    const [onsiteRemote, setOnsiteRemote] = React.useState('On-site');
 
 
+    const [TicketRemote, setTicketRemote] = useState('');
+    const [TicketHours, setTicketHours] = useState(0);
+    const [TicketMin, setTicketMin] = useState(0);
+    const [TicketUpdate01, setTicketUpdate01] = useState('');
     
     let ticketTableIndex= 0;
+    const handleChange3OnsiteRemote = (event) => {
+        setOnsiteRemote(event.target.value);
+      };
 
 
     (function getNameCookie(){
@@ -681,14 +689,16 @@ const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleChangePageHistoryLog = (event, newPageHistory) => {
-    setPage(newPageHistory);
-  };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 3));
     setPage(0);
   };
+
+  const handleChangePageHistoryLog = (event, newPageHistory) => {
+    setPage(newPageHistory);
+  };
+
+
 
 
   const [value, setValue] = React.useState('1');
@@ -872,33 +882,17 @@ function getCurrentDateTime(){
                     TICKET_INDEX:index
                 }).then((response)=>{
                     console.log(response.data)
-                    setTicketHistoryList(response.data);
+
+             
+                        setTicketHistoryList(response.data)
+                
+                    
                 })
         }
         catch{
 
         }
     }
-
-    function ticketHistoryTable(){
-
-                ticketHistoryList
-                .slice(historyLogPage* historyLogRowsPerPage, historyLogPage * historyLogRowsPerPage + historyLogRowsPerPage).map((row, index)=>{
-                        return(
-
-                            <TableRow hover key={row.ticket_log_id}>
-                                <TableCell  component="th" scope="row" align="left">{row.Ticket_ID}</TableCell>
-                                <TableCell align="left">{row.Technician_Email}</TableCell>
-                                <TableCell align="left">{row.Description}</TableCell>
-                                <TableCell align="left">{row.DateTime}</TableCell>
-                                                                                              
-                            </TableRow>
-
-                        );
-                })
-
-    }
-
 
 
     return (
@@ -1458,7 +1452,7 @@ function getCurrentDateTime(){
                                                         </div>
                                                     </div>
 
-                                                    <div className="row mt-2" >
+                                                    <div className="row mt-2"  >
                                                         <div className="col-xs-12 col-sm-12 col-md-12">
                                                            
                                                             <div className="row mt-4">
@@ -1539,9 +1533,19 @@ function getCurrentDateTime(){
                                                         </div>
                                                     </div>
 
-                                                    <div className='row mt-5'  >
+                                                    
+
+                                                    <div className='row mt-5'  style={{borderColor:'black'}} >
                                                             <div className='col-xs-12 col-sm-12 col-md-12' >
                                                           
+                                                            <div className='row'>
+                                                                            <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                <div className='lead'>
+                                                                                        <p className='p-2' style={{backgroundColor:'orange'}} ><b>Selected Ticket : {ticketId}</b></p>
+                                                                                </div>
+                                                                            </div>
+                                                                      </div>
+
                                                             <Tabs  className="mb-3"  >
                                                                 <Tab eventKey="home" title="Ticket Details"   >
                                                                 
@@ -1654,7 +1658,7 @@ function getCurrentDateTime(){
                                                                                   <TextareaAutosize
                                                                                         minRows={4}
                                                                                         aria-label="maximum height"
-                                                                                        value={ticketUpdate}
+                                                                                        
                                                                                         placeholder="Updates"
                                                                                         defaultValue={ticketUpdateDB}
                                                                                         style={{ width: 350 }}
@@ -1680,18 +1684,116 @@ function getCurrentDateTime(){
                                                                           </Card>
                                                                 </Tab>
                                                                 <Tab eventKey="contact" title="Support Time">
-                                                                     strtong                                                         
+                                                                      
+                                                                      <div className='row'>
+                                                                            <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                    <Card className='p-3' style={{borderColor:'black'}}>
+
+                                                                                        <div className='row'>
+                                                                                        <div className='col-xs-12 col-sm-3 col-md-3'>
+                                                                                       
+
+                                                                                                    <Button variant="contained"  className='mx-2' size='small' endIcon={<FileUploadIcon  />}>
+                                                                                                        Update
+                                                                                                        </Button>
+                                                                                        </div>
+                                                                                        
+                                                                                        </div>
+
+                                                                                        <hr style={{color:'orange'}} ></hr>
+
+                                                                                            <div className='row'>
+                                                                                                <div className='col-xs-12 col-sm-6 col-md-6'>
+
+                                                                                                    <div className='row'>
+                                                                                                            <div className='col-xs-12 col-sm-6'>
+                                                                                                            <Select
+                                                                                                                    labelId="demo-simple-select-label"
+                                                                                                                    id="demo-simple-select"
+                                                                                                                    value={onsiteRemote}
+                                                                                                                        className='px-4 mx-2'
+                                                                                                                        size='small'
+                                                                                                                        label='Remote\On-Site'
+                                                                                                                    onChange={(event)=>{
+                                                                                                                        handleChange3OnsiteRemote()
+                                                                                                                        setTicketRemote(event.target.value)
+                                                                                                                    }}
+
+                                                                                                                >
+                                                                                                                    <MenuItem value={'On-site'}>On-Site</MenuItem>
+                                                                                                                    <MenuItem value={'Remote'}>Remote Work</MenuItem>
+                                                                                                                
+                                                                                                                </Select>
+                                                                                                            </div>
+                                                                                                    
+                                                                                                    </div> 
+                                                                                                    <div className='row mt-4'  >
+                                                                                                            <div className='col-xs-12 col-sm-8 col-md-8'   style={{display:'inline-flex'}}>
+                                                                                                            <TextField
+                                                                                                                id="outlined-number"
+                                                                                                                label="Hours on Ticket"
+                                                                                                                size='small'
+                                                                                                                type="number"
+                                                                                                                InputLabelProps={{
+                                                                                                                    shrink: true,
+                                                                                                                }}
+
+                                                                                                            className="mx-2"
+                                                                                                            onChange={(event)=>{
+                                                                                                                setTicketHours(event.target.value)
+                                                                                                            }}
+                                                                                                                />
+                                                                                                            <TextField
+                                                                                                                id="outlined-number"
+                                                                                                                label="Minutes on Ticket"
+                                                                                                                size='small'
+                                                                                                                type="number"
+                                                                                                                InputLabelProps={{
+                                                                                                                    shrink: true,
+                                                                                                                }}
+                                                                                                                onChange={(event)=>{
+                                                                                                                    setTicketMin(event.target.value)
+                                                                                                                }}
+                                                                                                                />
+                                                                                                            </div>
+                                                                                            
+                                                                                                
+                                                                                        </div>
+                                
+                                                                                                </div>
+                                                                                                <div className='col-xs-12 col-sm-6 col-md-6'>
+                                                                                                <TextareaAutosize
+                                                                                                                minRows={4}
+                                                                                                                aria-label="maximum height"
+                                                                                                                
+                                                                                                                placeholder="Updates"
+                                                                                                                defaultValue={ticketUpdateDB}
+                                                                                                                style={{ width: 350 }}
+                                                                                                                onChange={(event)=>{
+                                                                                                                        setTicketUpdate(event.target.value);
+                                                                                                                }}
+                                                                                                                
+                                                                                                                />
+                                                                                                </div>
+                                                                                            
+                                                                                        </div>
+
+                                                                                   </Card>
+                                                                            </div>
+                                                                      </div>
+
+                                                                  
+
+                                                                 
+                                                                  
                                                                  </Tab>
                                                                  <Tab eventKey="history" title="Ticket History">
                                                                         
                                                                       
 
-                                                                        <div className='row mt-2'>
-                                                                            <div className='col-xs-12 col-sm-12 col-md-12'>
-                                                                                
-
-
-
+                                                                <div className='row mt-2'  style={{overflowY:'scroll', maxHeight:'550px'}}>
+                                                                    <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                    
                                                                    <Paper sx={{ width: '100%', mb: 1, mt:2 }}>
                                                                      <TableContainer component={Paper} >
                                                                         <Table stickyHeader sx={{ minWidth: 650 }}  size="small" aria-label="sticky table">
@@ -1705,8 +1807,22 @@ function getCurrentDateTime(){
                                                                             </TableHead>
                                                                                 <TableBody>
                                                                                    {
-                                                                                   
-                                                                                    
+                                                                                       
+                                                                                    ticketHistoryList
+                                                                                            .slice(historyLogPage* historyLogRowsPerPage, historyLogPage * historyLogRowsPerPage + historyLogRowsPerPage)
+                                                                                            .map((row, index)=>{
+                                                                                                    return(
+
+                                                                                                        <TableRow hover key={row.ticket_log_id}>
+                                                                                                            <TableCell  component="th" scope="row" align="left">{row.Ticket_ID}</TableCell>
+                                                                                                            <TableCell align="left">{row.Technician_Email}</TableCell>
+                                                                                                            <TableCell align="left">{row.Description}</TableCell>
+                                                                                                            <TableCell align="left">{row.DateTime}</TableCell>
+                                                                                                                                                                        
+                                                                                                        </TableRow>
+
+                                                                                                    );
+                                                                                            })
                                                                                    }
                                                                                 </TableBody>
                                                                                
@@ -1714,20 +1830,9 @@ function getCurrentDateTime(){
                                                                      
                                                                     </TableContainer>
                                                                    
-                                                                    <TablePagination 
-                                                                               style={{margin: 0 }}
-                                                                                rowsPerPageOptions={[3, 25, 100]}
-                                                                                component="div"
-                                                                                color="primary"
-                                                                                size='small'
-                                                                                count={ticketData.length}
-                                                                                rowsPerPage={rowsPerPage}
-                                                                                page={page}
-                                                                                onPageChange={handleChangePage}
-                                                                              //  onRowsPerPageChange={handleChangeRowsPerPage}
-                                                                            />
+                                                                  
 
-                                                                                </Paper>
+                                                                      </Paper>
 
 
                                                                             </div>
