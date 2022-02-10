@@ -30,7 +30,6 @@ function App() {
         <Route path="/ForgetPassword" element={<ForgetPassword/>} />
         <Route path="/Support" element={<Support/>} />
         <Route path="/Admin" element={<Vuyani/>} />
-        
    </Routes>
             
 
