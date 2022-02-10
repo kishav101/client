@@ -10,6 +10,7 @@ import Login from './Login';
 import Registration from './Registration';
 import ForgetPassword from './ForgetPassword';
 import Support from './ResquestSupport';
+import Vuyani from './Vuyani';
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
         <Route path="/Logout" element={<Login/>} />
         <Route path="/ForgetPassword" element={<ForgetPassword/>} />
         <Route path="/Support" element={<Support/>} />
+        <Route path="/Admin" element={<Vuyani/>} />
+        
    </Routes>
             
 

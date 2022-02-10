@@ -801,6 +801,16 @@ const techArr = [];
             setOpen1(false);
           };
           
+//Fowarding a ticket
+          const [open2, setOpen2] = useState(false);
+
+          const handleClickToOpen2 = () => {
+            setOpen2(true);
+          };
+          
+          const handleToClose2 = () => {
+            setOpen2(false);
+          };
     
 function getCurrentDateTime(){
     let today = new Date();
@@ -892,6 +902,25 @@ function getCurrentDateTime(){
         catch{
 
         }
+    }
+
+    function TechnicianUpdateForLogsTbl(){
+       
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+    
+        fetch('http://localhost:3001/insertTicketLogsComplete', {
+            method: "POST",
+            body: JSON.stringify({
+                 TICKETUPDATE_ID:ticketId,
+                 UPDATE:TicketUpdate01,
+                 TIMESTAMP:getCurrentDateTime(),
+                 TECH:UserEmail_Variable,
+                 TIME_SPENT_HRS: TicketHours,
+                 TIME_SPENT_MIN:TicketMin
+                 }),
+            headers
+            });
     }
 
 
@@ -1558,15 +1587,67 @@ function getCurrentDateTime(){
                                                                                              
                                                                                              
                                                                                                         <IconButton color="primary"  aria-label="delete">
-                                                                                                        <ArrowCircleRightIcon/>
+                                                                                                        <ArrowCircleRightIcon
+
+                                                                                                                onClick={()=>{
+                                                                                                                getAllEngineers()
+                                                                                                                    handleClickToOpen2()
+                                                                                                                
+                                                                                                                }}
+
+                                                                                                        />
+
+
+                                                                                            <Dialog open={open2} onClose={handleToClose2} maxWidth={'xl'}>
+                                                                                                            <DialogTitle>{"Foward Ticket To Technician"}</DialogTitle>
+                                                                                                                <DialogContent>
+                                                                                                                 
+                                                                                                                    <div className='row mt-2'>
+                                                                                                                        <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                                                             <Button variant='contained' color='info' size='small' onClick={handleClickOpen}>
+                                                                                                                                Select Technician
+                                                                                                                            </Button>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div className='row mt-2'>
+                                                                                                                            <div className='col-xs-12 col-sm-6 col-md-6'>
+                                                                                               
+                                                                                                                            <SimpleDialog
+                                                                                                                                selectedValue={selectedValue}
+                                                                                                                                
+                                                                                                                                open={open}
+                                                                                                                                onClose={handleClose}
+                                                                                                                                
+                                                                                                                                 />                                                                       
+                                                                                                                            </div>
+                                                                                                                           
+                                                                                                                    </div>
+                                                                                                                    <div className='row mt-2 mx-2'>
+                                                                                                                    <TextField
+                                                                                                                            autoFocus
+                                                                                                                            margin="dense"
+                                                                                                                            id="name"
+                                                                                                                            label="Selected technician"
+                                                                                                                            size='small'
+                                                                                                                            required={true}
+                                                                                                                            type="Text"
+                                                                                                                            value={selectedValue}
+                                                                                                                            onChange={(event)=>{
+                                                                                                                                setNewTicketAssignedTech(event.target.value);
+                                                                                                                            }} 
+                                                                                                                            fullWidth
+                                                                                                                            variant="standard"
+                                                                                                                        />
+                                                                                                                    </div>
+                                                                                                                  
+                                                                                                                </DialogContent>
+                                                                                                           
+                                                                                                        </Dialog>
                                                                                                     </IconButton>
                                                                                                
                                                                                               
                                                                                                         <IconButton color="primary"   aria-label="delete" >
-                                                                                                        <FileUploadIcon onClick={()=>{
-                                                                                                              updateTicket()
-                                                                                                             updateTicketLogs()
-                                                                                                        }}/>
+                                                                                                        <FileUploadIcon />
                                                                                                     </IconButton>
                                                                                               
                                                                                                 
@@ -1642,7 +1723,7 @@ function getCurrentDateTime(){
                                                                                             </div>
 
                                                                                 <div className='row mt-4'>
-                                                                                  <div className='col-xs-12 col-sm-6 col-md-6'>
+                                                                                  <div className='col-xs-12 col-sm-12 col-md-12'>
                                                                                   <InputLabel id="demo-simple-select-label">Description</InputLabel>
                                                                                   <TextareaAutosize
                                                                                         minRows={4}
@@ -1653,21 +1734,7 @@ function getCurrentDateTime(){
                                                                                         style={{ width: 350 }}
                                                                                         />
                                                                                   </div>
-                                                                                  <div className='col-xs-12 col-sm-6 col-md-6'>
-                                                                                  <InputLabel id="demo-simple-select-label">Updates</InputLabel>
-                                                                                  <TextareaAutosize
-                                                                                        minRows={4}
-                                                                                        aria-label="maximum height"
-                                                                                        
-                                                                                        placeholder="Updates"
-                                                                                        defaultValue={ticketUpdateDB}
-                                                                                        style={{ width: 350 }}
-                                                                                        onChange={(event)=>{
-                                                                                                setTicketUpdate(event.target.value);
-                                                                                        }}
-                                                                                        
-                                                                                        />
-                                                                                  </div>
+                                                                                 
                                                                                   
                                                                               </div>
                                                                                 
@@ -1683,7 +1750,7 @@ function getCurrentDateTime(){
 
                                                                           </Card>
                                                                 </Tab>
-                                                                <Tab eventKey="contact" title="Support Time">
+                                                                <Tab eventKey="contact" title="Activities">
                                                                       
                                                                       <div className='row'>
                                                                             <div className='col-xs-12 col-sm-12 col-md-12'>
@@ -1693,7 +1760,7 @@ function getCurrentDateTime(){
                                                                                         <div className='col-xs-12 col-sm-3 col-md-3'>
                                                                                        
 
-                                                                                                    <Button variant="contained"  className='mx-2' size='small' endIcon={<FileUploadIcon  />}>
+                                                                                                    <Button variant="contained" onClick={TechnicianUpdateForLogsTbl}  className='mx-2' size='small' endIcon={<FileUploadIcon  />}>
                                                                                                         Update
                                                                                                         </Button>
                                                                                         </div>
@@ -1766,11 +1833,11 @@ function getCurrentDateTime(){
                                                                                                                 minRows={4}
                                                                                                                 aria-label="maximum height"
                                                                                                                 
-                                                                                                                placeholder="Updates"
-                                                                                                                defaultValue={ticketUpdateDB}
+                                                                                                                placeholder="Write your updates here..."
+                                                                                                                
                                                                                                                 style={{ width: 350 }}
                                                                                                                 onChange={(event)=>{
-                                                                                                                        setTicketUpdate(event.target.value);
+                                                                                                                        setTicketUpdate01(event.target.value);
                                                                                                                 }}
                                                                                                                 
                                                                                                                 />
@@ -1803,6 +1870,8 @@ function getCurrentDateTime(){
                                                                                     <TableCell align="left"> <b>Technician</b></TableCell>
                                                                                     <TableCell align="left"> <b>Description</b></TableCell>
                                                                                     <TableCell align="left"><b>Time Stamp</b></TableCell>
+                                                                                    <TableCell align="left"><b>Hours</b></TableCell>
+                                                                                    <TableCell align="left"><b>Minutes</b></TableCell>
                                                                                   </TableRow>
                                                                             </TableHead>
                                                                                 <TableBody>
@@ -1818,7 +1887,8 @@ function getCurrentDateTime(){
                                                                                                             <TableCell align="left">{row.Technician_Email}</TableCell>
                                                                                                             <TableCell align="left">{row.Description}</TableCell>
                                                                                                             <TableCell align="left">{row.DateTime}</TableCell>
-                                                                                                                                                                        
+                                                                                                            <TableCell align="left">{row.Time_Spent_Hrs}</TableCell> 
+                                                                                                            <TableCell align="left">{row.Time_Spent_Min}</TableCell>                                                          
                                                                                                         </TableRow>
 
                                                                                                     );
