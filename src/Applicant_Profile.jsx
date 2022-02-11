@@ -235,11 +235,11 @@ export default function Applicant_Profile() {
     const[password, setPassword] = useState('');
     const[Enteredpassword, setEnteredPassword] = useState('');
     const[Newpassword, setNewPassword] = useState('');
-    const [avatar, setUserAvatar] = useState('');
+   
 
     const[applicationData, setApplicationData] = useState([]);
     const[ticketData, setTicketData] = useState([]);
-    const[searchTickets, setSearchTickets] = useState([]);
+   
 
     const [ticketId, setTicketId] = useState('');
     const [ticketName, setTicketName] = useState('');
@@ -267,21 +267,17 @@ export default function Applicant_Profile() {
     const [newTicketDescription, setNewTicketDescription] = useState('')
     const [newTicketEmail, setNewTicketEmail] = useState('')
     const [newTicketContact, setNewTicketContact] = useState('')
-    const [newTicketDateTime, setNewTicketDateTime] = useState('')
+
     const [newTicketAssignedTech, setNewTicketAssignedTech] = useState('')
     
-    const [newTicketTechnicianTime, setNewTicketTechnicianTime] = useState('')
-    
 
-    const [ticketHistory, setTicketHistory] = useState([])
 
-    
     const [ticketHistoryList, setTicketHistoryList] = useState([])
 
     const [onsiteRemote, setOnsiteRemote] = React.useState('On-site');
 
 
-    const [TicketRemote, setTicketRemote] = useState('');
+    const [TicketRemote, setTicketRemote] = useState('On-site');
     const [TicketHours, setTicketHours] = useState(0);
     const [TicketMin, setTicketMin] = useState(0);
     const [TicketUpdate01, setTicketUpdate01] = useState('');
@@ -811,6 +807,18 @@ const techArr = [];
           const handleToClose2 = () => {
             setOpen2(false);
           };
+
+//Closing a ticket
+
+const [open3, setOpen3] = useState(false);
+
+const handleClickToOpen3 = () => {
+  setOpen3(true);
+};
+
+const handleToClose3 = () => {
+  setOpen3(false);
+};
     
 function getCurrentDateTime(){
     let today = new Date();
@@ -850,16 +858,20 @@ function getCurrentDateTime(){
             });
     }
 
-    function updateTicket(){
+    function updateTicketDetails(){
 
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/updateTicketRecord', {
+        fetch('http://localhost:3001/updateTicketRecordDetails', {
             method: "POST",
             body: JSON.stringify({
-                 TICKETUPDATE_ID:ticketId,
-                 UPDATE:ticketUpdate,
+                UPDATE_NAME:ticketName,
+                UPDATE_DESCRIPTION:ticketDescription,
+                UPDATE_ADDRESS:ticketAddress,
+                UPDATE_EMAIL:ticketEmail,
+                UPDATE_CONTACT:ticketContact,
+                TICKETUPDATE_ID:ticketId
                  }),
             headers
             });
@@ -893,10 +905,8 @@ function getCurrentDateTime(){
                 }).then((response)=>{
                     console.log(response.data)
 
-             
                         setTicketHistoryList(response.data)
                 
-                    
                 })
         }
         catch{
@@ -923,6 +933,58 @@ function getCurrentDateTime(){
             });
     }
 
+    
+    function updateTicket(){
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+    
+        fetch('http://localhost:3001/updateTicketServiceRenderType', {
+            method: "POST",
+            body: JSON.stringify({
+                 TICKETUPDATE_ID:ticketId,
+                 SERVICE:TicketRemote,
+                 }),
+            headers
+            });
+        
+    }
+
+    function FowardTicketTechnician(){
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+    
+        fetch('http://localhost:3001/updateFowardTicketTechnician', {
+            method: "POST",
+            body: JSON.stringify({
+                 UPDATED_TECHNICIAN_EMAIL:selectedValue,
+                 UPDATED_TICKED_ID:ticketId
+                 }),
+            headers
+            });
+        
+    }
+
+    function CloseTicket(){
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+    
+        fetch('http://localhost:3001/updateCloseTicket', {
+            method: "POST",
+            body: JSON.stringify({
+                CLOSE_TICKET_SOLUTION:ticketSolution,
+                CLOSE_TICKED_STATUS:"Closed",
+                CLOSE_TICKED_DATE:getCurrentDateTime(),
+                CLOSE_TICKED_ID:ticketId
+                 }),
+            headers
+            });
+        
+    }
+
+ 
 
     return (
     <div>
@@ -1485,7 +1547,7 @@ function getCurrentDateTime(){
                                                         <div className="col-xs-12 col-sm-12 col-md-12">
                                                            
                                                             <div className="row mt-4">
-                                                                <div className="col-xs-12 col-sm-12 col-md-12" className='p-1' style={{backgroundColor:'#cacfd9',overflowY:'scroll', maxHeight:'400px'}}>
+                                                                <div className="col-xs-12 col-sm-12 col-md-12" className='p-1' >
                                                                 <Paper sx={{ width: '100%', mb: 1 }}>
                                                                     <TableContainer component={Paper} >
                                                                         <Table stickyHeader sx={{ minWidth: 650 }}  size="small" aria-label="sticky table">
@@ -1602,8 +1664,8 @@ function getCurrentDateTime(){
                                                                                                             <DialogTitle>{"Foward Ticket To Technician"}</DialogTitle>
                                                                                                                 <DialogContent>
                                                                                                                  
-                                                                                                                    <div className='row mt-2'>
-                                                                                                                        <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                                                    <div className='row mt-2 '>
+                                                                                                                        <div className='col-xs-12 col-sm-12 col-md-12 '>
                                                                                                                              <Button variant='contained' color='info' size='small' onClick={handleClickOpen}>
                                                                                                                                 Select Technician
                                                                                                                             </Button>
@@ -1639,6 +1701,15 @@ function getCurrentDateTime(){
                                                                                                                             variant="standard"
                                                                                                                         />
                                                                                                                     </div>
+
+                                                                                                                    <div className='row mt-3 mx-auto'>
+                                                                                                                           <Button variant='contained' color='warning' size='small' onClick={()=>{
+                                                                                                                               FowardTicketTechnician()
+                                                                                                                              
+                                                                                                                               }} >
+                                                                                                                                Forward
+                                                                                                                            </Button>
+                                                                                                                    </div>
                                                                                                                   
                                                                                                                 </DialogContent>
                                                                                                            
@@ -1647,7 +1718,7 @@ function getCurrentDateTime(){
                                                                                                
                                                                                               
                                                                                                         <IconButton color="primary"   aria-label="delete" >
-                                                                                                        <FileUploadIcon />
+                                                                                                        <FileUploadIcon onClick={updateTicketDetails} />
                                                                                                     </IconButton>
                                                                                               
                                                                                                 
@@ -1662,8 +1733,42 @@ function getCurrentDateTime(){
                                                                                                
 
                                                                                            
-                                                                                                    <IconButton color="primary"  aria-label="delete" >
-                                                                                                       <CancelIcon/>
+                                                                                                    <IconButton color="primary"  aria-label="Close Ticket" >
+                                                                                                       <CancelIcon onClick={handleClickToOpen3}/>
+
+                                                                                                       <Dialog open={open3} onClose={handleToClose3} maxWidth={'xl'}>
+                                                                                                            <DialogTitle>{"Closing Ticket : "+ticketId}</DialogTitle>
+                                                                                                                <DialogContent>
+                                                                                                                <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                                                               {getCurrentDateTime()}
+                                                                                                                               </div>
+                                                                                                                 <div className='row mt-2'>
+                                                                                                                 
+                                                                                                                               <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                                                              
+                                                                                                                               <InputLabel id="demo-simple-select-label">Solution</InputLabel>
+                                                                                                                                <TextareaAutosize
+                                                                                                                                        minRows={4}
+                                                                                                                                        aria-label="maximum height"
+                                                                                                                                        placeholder="....."
+                                                                                                                                        style={{ width: 350 }}
+                                                                                                                                        onChange={(event)=>{
+                                                                                                                                                setTicketSolution(event.target.value)
+                                                                                                                                        }}
+                                                                                                                                        />
+                                                                                                                               </div>
+                                                                                                                             
+                                                                                                                 </div>
+                                                                                                                 <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                                                 <Button variant='contained' color='warning' size='small' onClick={CloseTicket} >
+                                                                                                                                Close Ticket
+                                                                                                                  </Button>       
+                                                                                                                 </div>
+
+                                                                                                                </DialogContent>
+                                                                                                           
+                                                                                                        </Dialog>
+
                                                                                                   </IconButton>
                                                                                             </div>
                                                                                               
@@ -1715,7 +1820,7 @@ function getCurrentDateTime(){
                                                                                                     size="small"
                                                                                                     variant="standard"
                                                                                                     onChange={(event)=>{
-                                                                                                        
+                                                                                                        setTicketEmail(event.target.value)
                                                                                                     }}
                                                                                                     />
                                                                                                 </Form.Group>
@@ -1732,6 +1837,9 @@ function getCurrentDateTime(){
                                                                                         value={ticketDescription}
                                                                                         defaultValue={ticketDescriptionDb}
                                                                                         style={{ width: 350 }}
+                                                                                        onChange={(event)=>{
+                                                                                              setTicketDescription(event.target.value)
+                                                                                        }}
                                                                                         />
                                                                                   </div>
                                                                                  
@@ -1740,16 +1848,7 @@ function getCurrentDateTime(){
                                                                                 
                                                                             </Card>
                                                                 </Tab>
-                                                                <Tab eventKey="profile" title="Attachments" style={{backgroundColor:'pu'}} >
-                                                                
-                                                                         <Card className='shadow  p-3'>
-                                                                              
-                                                                              <hr style={{color:'orange'}}></hr>
-                                                                             
-                                                                             
-
-                                                                          </Card>
-                                                                </Tab>
+                                                             
                                                                 <Tab eventKey="contact" title="Activities">
                                                                       
                                                                       <div className='row'>
@@ -1760,7 +1859,12 @@ function getCurrentDateTime(){
                                                                                         <div className='col-xs-12 col-sm-3 col-md-3'>
                                                                                        
 
-                                                                                                    <Button variant="contained" onClick={TechnicianUpdateForLogsTbl}  className='mx-2' size='small' endIcon={<FileUploadIcon  />}>
+                                                                                                    <Button variant="contained" onClick={ ()=>{
+                                                                                                         updateTicket()
+                                                                                                    TechnicianUpdateForLogsTbl()
+                                                                                                   
+                                                                                                    
+                                                                                                    } } className='mx-2' size='small' endIcon={<FileUploadIcon  />}>
                                                                                                         Update
                                                                                                         </Button>
                                                                                         </div>
@@ -1781,8 +1885,9 @@ function getCurrentDateTime(){
                                                                                                                         className='px-4 mx-2'
                                                                                                                         size='small'
                                                                                                                         label='Remote\On-Site'
+                                                                                                                     required='true'
                                                                                                                     onChange={(event)=>{
-                                                                                                                        handleChange3OnsiteRemote()
+                                                                                                                        handleChange3OnsiteRemote(event)
                                                                                                                         setTicketRemote(event.target.value)
                                                                                                                     }}
 
