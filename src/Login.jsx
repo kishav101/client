@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from './Components/Nav';
 import Footer from './Components/Footer';
 import landingImage from './Assets/landingBackground.jpg';
-import { Card, Form,Button } from 'react-bootstrap';
+import { Card, Form } from 'react-bootstrap';
 import { useState, useEffect,useRef } from 'react';
 import lottie from 'lottie-web';
 import sideLottie from './Assets/LoginLottie.json';
@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import Axios from 'axios'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import TextField from '@mui/material/TextField';
-
+import EmailIcon from '@mui/icons-material/Email';
+import Button from '@mui/material/Button'
 
 export default function Login() {
 
@@ -25,14 +26,7 @@ let GoogleID=""
 let GoogleImgURL=""
 let GoogleName=""
 
-function inputs(){
-    return( <TextField
-        required
-        id="outlined-required"
-        label="Required"
-        defaultValue="Hello World"
-        />)
-}
+
 
 useEffect( ()=>{
 
@@ -68,7 +62,7 @@ useEffect( ()=>{
         setShowLogoutButton(true);
 
 
-        setLoginCookieValues();
+      //  setLoginCookieValues();
        // createCvRowForUser();
          
 
@@ -90,7 +84,7 @@ useEffect( ()=>{
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
 
-        fetch('http://localhost:3001/createCvRow', {
+        fetch('httpS://localhost:3001/createCvRow', {
             method: "POST",
             body: JSON.stringify({
                  userEMAIL1:x
@@ -115,7 +109,7 @@ useEffect( ()=>{
 
  function checkUserList(){ 
    
-     Axios.post("http://localhost:3001/getLoginPassword",{
+     Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getLoginPassword",{
             userEmail1:userEmail
         }).then((response)=>{
           
@@ -132,15 +126,13 @@ useEffect( ()=>{
 
    const setLoginCookieValues = function(){
 
-    if(GoogleEmail !== ""){
-        document.cookie = `usernameCookie= ${GoogleEmail}; `;
-        alert(GoogleEmail)
-    }
-    else{
+   
+        document.cookie = `usernameCookie= ${userEmail}; `;
+      //  alert(GoogleEmail);
         document.cookie = `usernameCookie= ${userEmail};`;
-        alert(userEmail)
-    }
-    
+  
+   
+
    }
 
     return (
@@ -174,7 +166,7 @@ useEffect( ()=>{
                                                         id="outlined-required"
                                                         label="Required"
                                                         type='password'
-                                                        placeholder='John@somewhere.com'
+                                                        placeholder='************'
                                                         onChange={(event)=>{
                                                                     setUserPassword(event.target.value);
                                                                 }}
@@ -182,31 +174,19 @@ useEffect( ()=>{
                                               
                                                
                                      
-                                                <Button className="mx-auto mt-3" variant="dark" type="button" onClick={checkUserList} style={{width:'50%'}} >
+                                               
+
+                                                <div className='row col-6  mx-auto mt-3'>
+                                                   <Button variant="contained" color='warning' endIcon={<EmailIcon />}
+                                                    onClick={()=>{
+                                                    checkUserList()
+                                                    setLoginCookieValues()}}
+                                                     >
                                                         Continue with Email
-                                                </Button>
-                                                <div className='row col-6 mx-auto'>
-                                                    { showLoginButton ?
-                                                        
-                                                        <GoogleLogin style={{width:'50% !important'}} className="mt-2"
-                                                            clientId= {clientId}
-                                                            buttonText="Login"
-                                                            onSuccess={onLoginSuccess}
-                                                            onFailure={onLoginFailure}
-                                                            cookiePolicy={'single_host_origin'}
-                                                        /> : null
-                                                    }
+                                                   </Button>
                                                 </div>
                                                
-                                                { showLogoutButton ?
-                                                    <GoogleLogout 
-                                                        clientId={clientId}
-                                                        buttonText="Logout"
-                                                        onLogoutSuccess={onLogoutSuccess}
-                                                        >
-                                                </GoogleLogout> : null
-                                                }
-                                                
+                                               
                                                 <a className="mt-3 mx-auto" onClick={
                                                     ()=>{
                                                         navigate('/ForgetPassword');

@@ -67,12 +67,27 @@ export default function ResquestSupport() {
         );
       }
 
+      function getCurrentDateTime(){
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        let yyyy = today.getFullYear();
+    
+        let hh = String(today.getHours()).padStart(2, '0');
+        let min = String(today.getMinutes()).padStart(2, '0'); 
+        
+        
+        today = yyyy + '-' + mm + '-' + dd+" "+hh+":"+min;
+    
+        return today
+    }
+
     function captureTicket(){
 
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/insertTicket', {
+        fetch('httpS://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertTicket', {
             method: "POST",
             body: JSON.stringify({
                 CUSTOMER_NAME:fullnameCustomer,
@@ -81,7 +96,7 @@ export default function ResquestSupport() {
                 EMAIL:emailCustomer,
                 CONTACT:contactCustomer,
                 CATAGORY:areaCustomer,
-                DATE_OPENED: Date().toLocaleUpperCase()
+                DATE_OPENED: getCurrentDateTime()
                  }),
             headers
             });

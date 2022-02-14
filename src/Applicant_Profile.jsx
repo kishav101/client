@@ -6,7 +6,7 @@ import { useState, useEffect,useRef } from 'react';
 import './App.css';
 import {  HouseDoorFill, FilePerson,AppIndicator,GearFill, BoxArrowLeft } from 'react-bootstrap-icons';
 import Axios from 'axios';
-import { Chart } from "react-google-charts";
+
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -52,6 +52,9 @@ import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+import { Line} from 'react-chartjs-2';
+import Chart from 'chart.js/auto'
+import { bottomNavigationClasses } from '@mui/material';
 
 export default function Applicant_Profile() {
 
@@ -294,7 +297,7 @@ export default function Applicant_Profile() {
        
             let dummyVariable = nameCookie.substring(nameCookie.lastIndexOf("=")+1).trim();
             UserEmail_Variable=dummyVariable;
-            console.log(UserEmail_Variable)
+           
     })();
 
     function prettyTable(){
@@ -393,7 +396,7 @@ function captureApplication(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://localhost:3001/insertApplication', {
+    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertApplication', {
         method: "POST",
         body: JSON.stringify({
              FULLNAME:name,
@@ -414,7 +417,7 @@ function UpdatePersonalStatement(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://localhost:3001/UpdateCVPersonalStatement', {
+    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateCVPersonalStatement', {
         method: "POST",
         body: JSON.stringify({
              PERSONAL_STATEMENT:personalStatement,
@@ -429,7 +432,7 @@ function UpdatePersonalStatement(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://localhost:3001/UpdateCVProfessionalExperience', {
+    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateCVProfessionalExperience', {
         method: "POST",
         body: JSON.stringify({
              PROFESSIONAL_EXPERIENCE:ProfessionalExperience,
@@ -444,7 +447,7 @@ function UpdateSkillsCompentencies(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://localhost:3001/UpdateCVSkillsCompentencies', {
+    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateCVSkillsCompentencies', {
         method: "POST",
         body: JSON.stringify({
              ACADEMIC_HISTORY:academicHistory,
@@ -465,8 +468,8 @@ function UpdateSkillsCompentencies(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    Axios.post("http://localhost:3001/getUserCvData",{
-            USER_EMAIL:"kishav527@gmail.com"
+    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getUserCvData",{
+            USER_EMAIL:UserEmail_Variable
         }).then((response)=>{
             console.log(response);
 
@@ -496,7 +499,7 @@ function UpdateSkillsCompentencies(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    Axios.post("http://localhost:3001/getApplicantSettings",{
+    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getApplicantSettings",{
             USER_EMAIL:UserEmail_Variable
         }).then((response)=>{
 
@@ -529,7 +532,7 @@ function UpdatePassword(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/setNewPassword', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/setNewPassword', {
             method: "POST",
             body: JSON.stringify({
                  PASSWORD: Newpassword,
@@ -549,7 +552,7 @@ function UpdatePreferences(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://localhost:3001/UpdateUserPreferences', {
+    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateUserPreferences', {
         method: "POST",
         body: JSON.stringify({
              APPLICANT_ID:applicantId,
@@ -568,7 +571,7 @@ function UpdatePreferences(){
 
 function retrieveAppplications(){
     
-    Axios.post("http://localhost:3001/getAllApplications",{
+    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllApplications",{
         USER_EMAIL:UserEmail_Variable,
       
     }).then((response)=>{
@@ -583,7 +586,7 @@ function retrieveAppplications(){
     {
         if(ticketSortValue.length>0)
         {
-            Axios.post("http://localhost:3001/getSpecificTicketSortID",{
+            Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getSpecificTicketSortID",{
                 TicketID:  ticketSortValue                  
                 }).
                 then((response)=>{
@@ -595,7 +598,7 @@ function retrieveAppplications(){
     }
         if(ticketSortState==='My Tickets')
         {
-            Axios.post("http://localhost:3001/getAllTechnicianTickets",{
+            Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTechnicianTickets",{
             USER_EMAIL:UserEmail_Variable                     
             }).
             then((response)=>{
@@ -607,7 +610,7 @@ function retrieveAppplications(){
         {
             if(ticketSortValue.length>0)
             {
-                Axios.post("http://localhost:3001/getAllTechnicianTickets", {
+                Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTechnicianTickets", {
                     USER_EMAIL:ticketSortValue  
                 }).then((response)=>{
                         setTicketData(response.data)
@@ -620,7 +623,7 @@ function retrieveAppplications(){
             
             if(ticketSortValue.length>0)
             {
-                Axios.post("http://localhost:3001/getSearchTicketResults", {
+                Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getSearchTicketResults", {
                     USER_Name:ticketSortValue  
                 }).then((response)=>{
                         setTicketData(response.data)
@@ -629,7 +632,7 @@ function retrieveAppplications(){
         }
         if(ticketSortState==='All')
         {
-            Axios.get("http://localhost:3001/getAllTickets").then((response)=>{
+            Axios.get("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTickets").then((response)=>{
                 setTicketData(response.data)
 
                 console.log(response.data)
@@ -643,7 +646,7 @@ function retrieveAppplications(){
 function displayTicket(index){
 
   try{
-    Axios.post("http://localhost:3001/getSpecificTicketData",{
+    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getSpecificTicketData",{
         SEARCH_BY: index                   
       }).then((response)=>{
 
@@ -712,7 +715,7 @@ const techArr = [];
 
   function getAllEngineers(){
     
-    Axios.get("http://localhost:3001/getAllTechnicians").then((response)=>{
+    Axios.get("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTechnicians").then((response)=>{
             setEngineerList(response.data);
             
             let engineerTotal = response.data.length;
@@ -840,7 +843,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/insertNewTicketTech', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertNewTicketTech', {
             method: "POST",
             body: JSON.stringify({
                  NAME_TICKET:newTicketName ,
@@ -857,13 +860,14 @@ function getCurrentDateTime(){
             headers
             });
     }
+//---------------------------------------above are pointing to rds--------------------------------------------------------------------------
 
     function updateTicketDetails(){
 
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/updateTicketRecordDetails', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateTicketRecordDetails', {
             method: "POST",
             body: JSON.stringify({
                 UPDATE_NAME:ticketName,
@@ -878,16 +882,16 @@ function getCurrentDateTime(){
         
     }
 
-    function updateTicketLogs(){
+    function updateTicketLogs(logUpdate){
 
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/insertUpdateTicketLogs', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertUpdateTicketLogs', {
             method: "POST",
             body: JSON.stringify({
                  TICKETUPDATE_ID:ticketId,
-                 UPDATE:ticketUpdate,
+                 UPDATE:logUpdate,
                  TIMESTAMP:getCurrentDateTime(),
                  TECH:UserEmail_Variable
                  }),
@@ -900,7 +904,7 @@ function getCurrentDateTime(){
 
         try{
            
-                Axios.post("http://localhost:3001/getAllTicketLogHistory", {
+                Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTicketLogHistory", {
                     TICKET_INDEX:index
                 }).then((response)=>{
                     console.log(response.data)
@@ -919,7 +923,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/insertTicketLogsComplete', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertTicketLogsComplete', {
             method: "POST",
             body: JSON.stringify({
                  TICKETUPDATE_ID:ticketId,
@@ -939,7 +943,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/updateTicketServiceRenderType', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateTicketServiceRenderType', {
             method: "POST",
             body: JSON.stringify({
                  TICKETUPDATE_ID:ticketId,
@@ -955,14 +959,14 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/updateFowardTicketTechnician', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateFowardTicketTechnician', {
             method: "POST",
             body: JSON.stringify({
                  UPDATED_TECHNICIAN_EMAIL:selectedValue,
                  UPDATED_TICKED_ID:ticketId
                  }),
             headers
-            });
+            }).then();
         
     }
 
@@ -971,7 +975,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://localhost:3001/updateCloseTicket', {
+        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateCloseTicket', {
             method: "POST",
             body: JSON.stringify({
                 CLOSE_TICKET_SOLUTION:ticketSolution,
@@ -984,6 +988,86 @@ function getCurrentDateTime(){
         
     }
 
+let arrOpenTickets = [];
+let arrClosedTickets =[];
+
+const [s, setS] = useState(0);
+const [s2, setS2] = useState(0);
+
+( function getReportChartTicketOpenData(){
+
+    try{
+       
+        Axios.post("http://localhost:3001/getTicketsOpenReports", {
+            USER_EMAIL:UserEmail_Variable
+        }).then((response)=>
+        {
+         
+           for(let k = 0 ;k < response.data.length; k++){
+               arrOpenTickets.push(response.data[k].num)
+           }
+           setS(arrOpenTickets)
+           
+        })
+    }
+    catch{
+
+    }
+})();
+
+
+( function getReportChartTicketClosedData(){
+
+    try{
+       
+        Axios.post("http://localhost:3001/getTicketsClosedReports", {
+            USER_EMAIL:UserEmail_Variable
+        }).then((response)=>
+        {
+         
+           for(let k = 0 ;k < response.data.length; k++){
+               arrClosedTickets.push(response.data[k].num)
+           }
+           setS2(arrClosedTickets)
+           
+        })
+    }
+    catch{
+
+    }
+})();
+   
+
+    function LineChartOpenTickets() {
+      
+        const data = {
+
+            labels:[ 'Jan', 'Feb', 'March', 'April', 'May','June','July','August', 'September', 'October', 'November','December' ],
+            datasets: [
+                {
+                    label:'Open Monthly tickets',
+                    data: s,
+                    backgroundColor: ['rgba(35, 208, 57, 0.8)'],
+                    borderColor : ['rgba(35, 208, 57, 0.8)'],
+                    color :['rgba(35, 208, 57, 0.8)']
+                },
+                {
+                    label:'Closed Monthly tickets',
+                    data: s2,
+                    backgroundColor: ['rgba(250, 20, 32, 0.8)'],
+                    borderColor : ['rgba(250, 20, 32, 0.8)'],
+                    color :['rgba(250, 20, 32, 0.8)']
+                }
+            ]
+        }
+
+        return(
+            <Line data={data}>
+
+            </Line>
+        )
+
+    }
  
 
     return (
@@ -1006,7 +1090,7 @@ function getCurrentDateTime(){
 
                                       </Nav.Item>
                                         <Nav.Item >
-                                            <Nav.Link style={{color:'#474747'}} className="" eventKey="first"><HouseDoorFill/>  Applicant Home</Nav.Link>
+                                            <Nav.Link style={{color:'#474747'}} className="" eventKey="first"><HouseDoorFill/> Applicant Home</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
                                              <Nav.Link style={{color:'#474747'}} eventKey="second"> <FilePerson/> Curriculum Vitae</Nav.Link>
@@ -1028,87 +1112,37 @@ function getCurrentDateTime(){
                                              <Nav.Link style={{color:'#474747'}} eventKey="fifth"><GearFill/> Preferences</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                             <Nav.Link style={{color:'#474747'}} onClick={()=>{
-                                                 
-                                             }} eventKey="sixth"> <BoxArrowLeft/> Logout</Nav.Link>
+                                             <Nav.Link style={{color:'#474747'}}  eventKey="sixth"> <BoxArrowLeft/> Logout</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                     </Col>
                                     <Col sm={9}>
                                     <Tab.Content>
                                         <Tab.Pane eventKey="first" className="">
-                                             <div className="row mt-3">
-                                                <div className="col-xs-12 col-sm-12 col-md-12">
-                                                        <Card className="shadow endTabSpace">
-                                                            <Card.Body>
-                                                                <h5>Ticket Statistics</h5>
-                                                                    <p> Reflecting  ticket statistics for past five days
-                                                                      
-                                                                    </p>
-                                                                    <hr style={{color:'orange', padding:'1px'}}/>
-                                                                    <Form>
-                                                                        <div className="row">
-                                                                            <div className="col-xs-12 col-sm-6 col-md-6">
-                                                                                
-                                                                                <div style={{ display: 'flex', maxWidth: 900 }}>
-                                                                                        <Chart
-                                                                                            width={400}
-                                                                                            height={300}
-                                                                                            chartType="ColumnChart"
-                                                                                            loader={<div>Loading Chart</div>}
-                                                                                            data={[
-                                                                                            ['Tickets', ' Open Tickets', 'Closed Tickets'],
-                                                                                            ['Durban', 8175000, 8008000],
-                                                                                            ['Cape Town', 3792000, 3694000],
-                                                                                           
-                                                                                            ]}
-                                                                                            options={{
-                                                                                            title: 'Visual representation of tickets',
-                                                                                            chartArea: { width: '30%' },
-                                                                                            hAxis: {
-                                                                                                title: 'Total Tickets',
-                                                                                                minValue: 0,
-                                                                                            },
-                                                                                            vAxis: {
-                                                                                                title: 'City',
-                                                                                            },
-                                                                                            }}
-                                                                                            legendToggle
-                                                                                        />
-                                                                                       
-                                                                                  </div>
-                                                                            </div>
-                                                                            <div className="col-xs-12 col-sm-6 col-md-6">
-                                                                                <div style={{ display: 'flex', maxWidth: 900 }}>
-                                                                                <Chart
-                                                                                            width={400}
-                                                                                            height={'300px'}
-                                                                                            chartType="AreaChart"
-                                                                                            loader={<div>Loading Chart</div>}
-                                                                                            data={[
-                                                                                            ['Year', 'Sales', 'Expenses'],
-                                                                                            ['2013', 1000, 400],
-                                                                                            ['2014', 1170, 460],
-                                                                                            ['2015', 660, 1120],
-                                                                                            ['2016', 1030, 540],
-                                                                                            ]}
-                                                                                            options={{
-                                                                                            title: 'Company Performance',
-                                                                                            hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
-                                                                                            vAxis: { minValue: 0 },
-                                                                                            // For the legend to fit, we make the chart area smaller
-                                                                                            chartArea: { width: '50%', height: '70%' },
-                                                                                            // lineWidth: 25
-                                                                                            }}
-                                                                                    />
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                      
-                                                                    </Form>
-                                                                   
-                                                            </Card.Body>
-                                                        </Card>
+                                         
+                                         <div className='row mt-4'>
+                                             <div className='lead'>
+                                               <b> Ticket Reports : {UserEmail_Variable}</b>
+                                               <hr className='endTabSpace'></hr>
+                                             </div>
+                                         </div>
+
+                                             <div className='row mt-2'>
+                                                 <div className="col-xs-12 col-sm-6 col-md-6">
+
+                                                   <div className='chart'>
+                                                    {LineChartOpenTickets()}
+                                                   </div> 
+                                                    
+
+                                                 </div>
+                                                 <div className="col-xs-12 col-sm-6 col-md-6">
+
+                                                    <div className='chart'>
+                                                    {LineChartOpenTickets()}
+                                                    </div> 
+                                                    
+
                                                 </div>
                                              </div>
                                         </Tab.Pane>
@@ -1129,7 +1163,7 @@ function getCurrentDateTime(){
                                                                          
                                                                 }} />     
                                                                 </Form>
-                                                                <Button variant="dark" size="sm" onClick={UpdatePersonalStatement}>Save Changes</Button>
+                                                                <Button variant="contained" color='warning' size="small" onClick={UpdatePersonalStatement}>Save Changes</Button>
                                                         </Card.Body>
                                                         </Card>
                                                 </div>
@@ -1145,7 +1179,7 @@ function getCurrentDateTime(){
                                                                   <Form.Control size="sm" className="mb-2" as="textarea" defaultValue={ProfessionalExperience}   rows={2} onChange={(event)=>{
                                                                             setProfessionalExperience(event.target.value);
                                                                   }} /> 
-                                                                  <Button variant="dark" size="sm" onClick={UpdateProfessionalExperience}>Save Changes</Button>
+                                                                  <Button variant="contained" color='warning' size="small" onClick={UpdateProfessionalExperience}>Save Changes</Button>
                                                                 </Form>
                                                             </Card.Body>
                                                         </Card>
@@ -1197,7 +1231,7 @@ function getCurrentDateTime(){
                                                                       </div>
                                                                       <div className="row">
                                                                         <div className="col-xs-12 col-sm-4 col-md-4">
-                                                                             <Button variant="dark" size="sm" onClick={UpdateSkillsCompentencies}>Save Changes</Button>
+                                                                             <Button variant="contained" color='warning' size="small" onClick={UpdateSkillsCompentencies}>Save Changes</Button>
                                                                         </div>
                                                                     </div>
                                                                     </Form>
@@ -1230,7 +1264,7 @@ function getCurrentDateTime(){
                                                          </Form.Select>        
                                                         </div>
                                                         <div className="col-xs-12 col-sm-4 col-md-4">
-                                                            <Button variant="dark" size="sm" onClick={()=>{
+                                                            <Button variant="contained" color='warning' size="small" onClick={()=>{
                                                             
                                                                 startAssessment();
                                                             }
@@ -1270,7 +1304,7 @@ function getCurrentDateTime(){
                                                                              :null}
 
                                                                                 <div className="col-xs-12 col-sm-4 col-md-4">
-                                                                                        <Button className="" size="sm" variant="danger" onClick={cancelAssessment}>Cancel</Button>
+                                                                                        <Button variant="contained" color='danger' size="small" variant="danger" onClick={cancelAssessment}>Cancel</Button>
                                                                                 </div>
                                                                             </div>
  
@@ -1287,7 +1321,7 @@ function getCurrentDateTime(){
                                                                             </div>
                                                                             <div className='answer-section expandbutton' style={{width:'50%'}}>
                                                                                 {dummyArray[currentQuestion].answerOptions.map((answerOption) => (
-                                                                                <Button className="my-1 row mx-2" size="sm" variant="dark" onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>{answerOption.answerText}</Button>
+                                                                                <Button className="my-1 row mx-2" variant="contained" color='warning' size='small' onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>{answerOption.answerText}</Button>
                                                                             ))}
                                                                         </div>
                                                                     </Card>
@@ -1576,9 +1610,11 @@ function getCurrentDateTime(){
                                                                                                 onClick={(event)=>{
                          
                                                                                                         let temp = event.currentTarget.outerText;
-                                                                                                        temp = temp.substring(0,1).trim();
+                                                                                                     
+                                                                                                        temp = temp.substring(0,2).trim();
                                                                                                         ticketTableIndex = temp;
-                                                                                                        console.log(ticketTableIndex)
+                                                                                                        console.log(temp)
+                                                                                                        
 
                                                                                                         displayTicket(ticketTableIndex)
                                                                                                         fillTicketHistoryList(ticketTableIndex)
@@ -1632,7 +1668,7 @@ function getCurrentDateTime(){
                                                             <div className='row'>
                                                                             <div className='col-xs-12 col-sm-12 col-md-12'>
                                                                                 <div className='lead'>
-                                                                                        <p className='p-2' style={{backgroundColor:'orange'}} ><b>Selected Ticket : {ticketId}</b></p>
+                                                                                        <p className='p-2' style={{backgroundColor:'#1f1f1f', color:'white'}} ><b>Selected Ticket : {ticketId}</b></p>
                                                                                 </div>
                                                                             </div>
                                                                       </div>
@@ -1705,7 +1741,7 @@ function getCurrentDateTime(){
                                                                                                                     <div className='row mt-3 mx-auto'>
                                                                                                                            <Button variant='contained' color='warning' size='small' onClick={()=>{
                                                                                                                                FowardTicketTechnician()
-                                                                                                                              
+                                                                                                                               updateTicketLogs("Forwarded ticket to : "+selectedValue)
                                                                                                                                }} >
                                                                                                                                 Forward
                                                                                                                             </Button>
@@ -1760,8 +1796,11 @@ function getCurrentDateTime(){
                                                                                                                              
                                                                                                                  </div>
                                                                                                                  <div className='col-xs-12 col-sm-12 col-md-12'>
-                                                                                                                 <Button variant='contained' color='warning' size='small' onClick={CloseTicket} >
-                                                                                                                                Close Ticket
+                                                                                                                 <Button variant='contained' color='warning' size='small' onClick={()=>{
+                                                                                                                     CloseTicket()
+                                                                                                                     updateTicketLogs("Ticket closed by : "+UserEmail_Variable)
+                                                                                                                 }} >
+                                                                                                                        Close Ticket
                                                                                                                   </Button>       
                                                                                                                  </div>
 
@@ -1828,7 +1867,7 @@ function getCurrentDateTime(){
                                                                                             </div>
 
                                                                                 <div className='row mt-4'>
-                                                                                  <div className='col-xs-12 col-sm-12 col-md-12'>
+                                                                                  <div className='col-xs-12 col-sm-6 col-md-6'>
                                                                                   <InputLabel id="demo-simple-select-label">Description</InputLabel>
                                                                                   <TextareaAutosize
                                                                                         minRows={4}
@@ -1842,8 +1881,17 @@ function getCurrentDateTime(){
                                                                                         }}
                                                                                         />
                                                                                   </div>
+                                                                                  <div className='col-xs-12 col-sm-6 col-md-6'>
+                                                                                                        <TextField
+                                                                                                            label="Status"
+                                                                                                            id="standard-size-small"
+                                                                                                            value={ticketStatus}
+                                                                                                            size="small"
+                                                                                                            variant="standard"
+                                                                                                           aria-readonly
+                                                                                                            />
+                                                                                                        </div>
                                                                                  
-                                                                                  
                                                                               </div>
                                                                                 
                                                                             </Card>
@@ -2094,7 +2142,7 @@ function getCurrentDateTime(){
                                                         </div>
                                                         <div className="row">
                                                             <div className="col-xs-12 col-sm-4 col-md-4">
-                                                              <Button variant="dark" size="sm" onClick={UpdatePreferences}>Save Changes</Button>
+                                                              <Button variant="contained" color='warning' size="small" onClick={UpdatePreferences}>Save Changes</Button>
                                                             </div>
                                                         </div>
                                                     </Form>
@@ -2134,7 +2182,7 @@ function getCurrentDateTime(){
                                                     </div>
                                                     <div className="row">
                                                             <div className="col-xs-12 col-sm-4 col-md-4">
-                                                              <Button variant="dark" size="sm" onClick={UpdatePassword}>Save Changes</Button>
+                                                              <Button variant="contained" color='warning' size="small" onClick={UpdatePassword}>Save Changes</Button>
                                                             </div>
                                                         </div>
                                                  
