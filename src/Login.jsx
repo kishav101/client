@@ -109,7 +109,7 @@ useEffect( ()=>{
 
  function checkUserList(){ 
    
-     Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getLoginPassword",{
+     Axios.post("http://localhost:3001/getLoginPassword",{
             userEmail1:userEmail
         }).then((response)=>{
           

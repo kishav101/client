@@ -991,8 +991,11 @@ function getCurrentDateTime(){
 let arrOpenTickets = [];
 let arrClosedTickets =[];
 
+let arrHoursTickets =[];
+
 const [s, setS] = useState(0);
 const [s2, setS2] = useState(0);
+const [s3, setS3] = useState(0);
 
 ( function getReportChartTicketOpenData(){
 
@@ -1036,6 +1039,29 @@ const [s2, setS2] = useState(0);
 
     }
 })();
+
+( function getReportChartTicketHoursWorkedData(){
+
+    try{
+       
+        Axios.post("http://localhost:3001/getTicketsHoursWorkedTechnicianReports", {
+            USER_EMAIL:UserEmail_Variable
+        }).then((response)=>
+        {
+         
+           for(let k = 0 ;k < response.data.length; k++){
+               arrHoursTickets.push(response.data[k].Hours)
+           }
+           setS3(arrHoursTickets)
+           
+        })
+    }
+    catch{
+
+    }
+})();
+
+
    
 
     function LineChartOpenTickets() {
@@ -1058,6 +1084,32 @@ const [s2, setS2] = useState(0);
                     borderColor : ['rgba(250, 20, 32, 0.8)'],
                     color :['rgba(250, 20, 32, 0.8)']
                 }
+            ]
+        }
+
+        return(
+            <Line data={data}>
+
+            </Line>
+        )
+
+    }
+
+
+    function LineChartHoursTickets() {
+      
+        const data = {
+
+            labels:[ 'Jan', 'Feb', 'March', 'April', 'May','June','July','August', 'September', 'October', 'November','December' ],
+            datasets: [
+                {
+                    label:'Monthly Hours',
+                    data: s3,
+                    backgroundColor: ['rgba(39, 106, 245, 0.8)'],
+                    borderColor : ['rgba(39, 106, 245, 0.8)'],
+                    color :['rgba(39, 106, 245, 0.8)']
+                },
+               
             ]
         }
 
@@ -1139,7 +1191,7 @@ const [s2, setS2] = useState(0);
                                                  <div className="col-xs-12 col-sm-6 col-md-6">
 
                                                     <div className='chart'>
-                                                    {LineChartOpenTickets()}
+                                                    { LineChartHoursTickets()}
                                                     </div> 
                                                     
 
