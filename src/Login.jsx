@@ -109,7 +109,7 @@ useEffect( ()=>{
 
  function checkUserList(){ 
    
-     Axios.post("http://localhost:3001/getLoginPassword",{
+     Axios.post("https://techresqnodesrv.click/getLoginPassword",{
             userEmail1:userEmail
         }).then((response)=>{
           

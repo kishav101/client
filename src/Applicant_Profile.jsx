@@ -396,7 +396,7 @@ function captureApplication(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertApplication', {
+    fetch('https://techresqnodesrv.click/insertApplication', {
         method: "POST",
         body: JSON.stringify({
              FULLNAME:name,
@@ -417,7 +417,7 @@ function UpdatePersonalStatement(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateCVPersonalStatement', {
+    fetch('https://techresqnodesrv.click/UpdateCVPersonalStatement', {
         method: "POST",
         body: JSON.stringify({
              PERSONAL_STATEMENT:personalStatement,
@@ -432,7 +432,7 @@ function UpdatePersonalStatement(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateCVProfessionalExperience', {
+    fetch('https://techresqnodesrv.click/UpdateCVProfessionalExperience', {
         method: "POST",
         body: JSON.stringify({
              PROFESSIONAL_EXPERIENCE:ProfessionalExperience,
@@ -447,7 +447,7 @@ function UpdateSkillsCompentencies(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateCVSkillsCompentencies', {
+    fetch('https://techresqnodesrv.click/UpdateCVSkillsCompentencies', {
         method: "POST",
         body: JSON.stringify({
              ACADEMIC_HISTORY:academicHistory,
@@ -468,7 +468,7 @@ function UpdateSkillsCompentencies(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getUserCvData",{
+    Axios.post("https://techresqnodesrv.click/getUserCvData",{
             USER_EMAIL:UserEmail_Variable
         }).then((response)=>{
             console.log(response);
@@ -499,7 +499,7 @@ function UpdateSkillsCompentencies(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getApplicantSettings",{
+    Axios.post("https://techresqnodesrv.click/getApplicantSettings",{
             USER_EMAIL:UserEmail_Variable
         }).then((response)=>{
 
@@ -532,7 +532,7 @@ function UpdatePassword(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/setNewPassword', {
+        fetch('https://techresqnodesrv.click/setNewPassword', {
             method: "POST",
             body: JSON.stringify({
                  PASSWORD: Newpassword,
@@ -552,7 +552,7 @@ function UpdatePreferences(){
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
-    fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/UpdateUserPreferences', {
+    fetch('https://techresqnodesrv.click/UpdateUserPreferences', {
         method: "POST",
         body: JSON.stringify({
              APPLICANT_ID:applicantId,
@@ -571,7 +571,7 @@ function UpdatePreferences(){
 
 function retrieveAppplications(){
     
-    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllApplications",{
+    Axios.post("https://techresqnodesrv.click/getAllApplications",{
         USER_EMAIL:UserEmail_Variable,
       
     }).then((response)=>{
@@ -586,7 +586,7 @@ function retrieveAppplications(){
     {
         if(ticketSortValue.length>0)
         {
-            Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getSpecificTicketSortID",{
+            Axios.post("https://techresqnodesrv.click/getSpecificTicketSortID",{
                 TicketID:  ticketSortValue                  
                 }).
                 then((response)=>{
@@ -598,7 +598,7 @@ function retrieveAppplications(){
     }
         if(ticketSortState==='My Tickets')
         {
-            Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTechnicianTickets",{
+            Axios.post("https://techresqnodesrv.click/getAllTechnicianTickets",{
             USER_EMAIL:UserEmail_Variable                     
             }).
             then((response)=>{
@@ -610,7 +610,7 @@ function retrieveAppplications(){
         {
             if(ticketSortValue.length>0)
             {
-                Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTechnicianTickets", {
+                Axios.post("https://techresqnodesrv.click/getAllTechnicianTickets", {
                     USER_EMAIL:ticketSortValue  
                 }).then((response)=>{
                         setTicketData(response.data)
@@ -623,7 +623,7 @@ function retrieveAppplications(){
             
             if(ticketSortValue.length>0)
             {
-                Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getSearchTicketResults", {
+                Axios.post("https://techresqnodesrv.click/getSearchTicketResults", {
                     USER_Name:ticketSortValue  
                 }).then((response)=>{
                         setTicketData(response.data)
@@ -632,7 +632,7 @@ function retrieveAppplications(){
         }
         if(ticketSortState==='All')
         {
-            Axios.get("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTickets").then((response)=>{
+            Axios.get("https://techresqnodesrv.click/getAllTickets").then((response)=>{
                 setTicketData(response.data)
 
                 console.log(response.data)
@@ -646,7 +646,7 @@ function retrieveAppplications(){
 function displayTicket(index){
 
   try{
-    Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getSpecificTicketData",{
+    Axios.post("https://techresqnodesrv.click/getSpecificTicketData",{
         SEARCH_BY: index                   
       }).then((response)=>{
 
@@ -715,7 +715,7 @@ const techArr = [];
 
   function getAllEngineers(){
     
-    Axios.get("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTechnicians").then((response)=>{
+    Axios.get("https://techresqnodesrv.click/getAllTechnicians").then((response)=>{
             setEngineerList(response.data);
             
             let engineerTotal = response.data.length;
@@ -843,7 +843,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertNewTicketTech', {
+        fetch('https://techresqnodesrv.click/insertNewTicketTech', {
             method: "POST",
             body: JSON.stringify({
                  NAME_TICKET:newTicketName ,
@@ -867,7 +867,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateTicketRecordDetails', {
+        fetch('https://techresqnodesrv.click/updateTicketRecordDetails', {
             method: "POST",
             body: JSON.stringify({
                 UPDATE_NAME:ticketName,
@@ -887,7 +887,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertUpdateTicketLogs', {
+        fetch('https://techresqnodesrv.click//insertUpdateTicketLogs', {
             method: "POST",
             body: JSON.stringify({
                  TICKETUPDATE_ID:ticketId,
@@ -904,7 +904,7 @@ function getCurrentDateTime(){
 
         try{
            
-                Axios.post("http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/getAllTicketLogHistory", {
+                Axios.post("https://techresqnodesrv.click/getAllTicketLogHistory", {
                     TICKET_INDEX:index
                 }).then((response)=>{
                     console.log(response.data)
@@ -923,7 +923,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/insertTicketLogsComplete', {
+        fetch('https://techresqnodesrv.click/insertTicketLogsComplete', {
             method: "POST",
             body: JSON.stringify({
                  TICKETUPDATE_ID:ticketId,
@@ -943,7 +943,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateTicketServiceRenderType', {
+        fetch('https://techresqnodesrv.click/updateTicketServiceRenderType', {
             method: "POST",
             body: JSON.stringify({
                  TICKETUPDATE_ID:ticketId,
@@ -959,7 +959,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateFowardTicketTechnician', {
+        fetch('https://techresqnodesrv.click/updateFowardTicketTechnician', {
             method: "POST",
             body: JSON.stringify({
                  UPDATED_TECHNICIAN_EMAIL:selectedValue,
@@ -975,7 +975,7 @@ function getCurrentDateTime(){
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
     
-        fetch('http://techreqnodeserver01.us-east-2.elasticbeanstalk.com/updateCloseTicket', {
+        fetch('https://techresqnodesrv.click/updateCloseTicket', {
             method: "POST",
             body: JSON.stringify({
                 CLOSE_TICKET_SOLUTION:ticketSolution,
@@ -1044,6 +1044,8 @@ const [s3, setS3] = useState(0);
 
     try{
        
+        arrHoursTickets = [];
+
         Axios.post("http://localhost:3001/getTicketsHoursWorkedTechnicianReports", {
             USER_EMAIL:UserEmail_Variable
         }).then((response)=>
