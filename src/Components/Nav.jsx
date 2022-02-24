@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import '../App.css';
 
 
-
 export default class NavBar extends Component {
   render() {
     
@@ -27,7 +26,8 @@ export default class NavBar extends Component {
                 </Nav>
                 <Nav>
                   <Link to = "/Login"  style={{color:'white', textDecoration:'none', marginRight:'10px'}}>Login</Link>
-                  <Link to = "/Register"  style={{color:'white', textDecoration:'none'}}>  Register </Link>
+                  <Link to = "/Register"  style={{color:'white', textDecoration:'none',marginRight:'10px'}}>  Register </Link>
+                  <Link to = "/Admin"  style={{color:'white', textDecoration:'none'}}>  Admin </Link>
                 </Nav>
               </Navbar.Collapse>
               </Container>

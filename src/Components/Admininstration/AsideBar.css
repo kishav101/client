@@ -1,0 +1,97 @@
+.sidebar {
+    position: relative;
+    display:"flex";
+    background-color: rgb(180, 180, 180);
+    width: 180px;
+    height:100vh;
+    transition:all 1s ease;
+
+}
+
+.sidebar.true {
+    position: relative;
+    display:"flex";
+    width: 70px;
+    transition:all .4s ease;
+}
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 9rem;
+    flex-direction: column;
+    padding:8rem 4rem 2rem 2rem;
+}
+
+heading {
+
+
+
+}
+
+.listtext {
+    color:'white';
+    display: none;
+}
+.listtext.true {
+    display: none;
+    transition:all .3s ease;
+}
+.toggleButton {
+    position:absolute;
+    top:0;
+    left:0;
+    background-color: rgb(214, 214, 214);
+}
+.profile_image.true {
+    display: none;
+}
+.profilename{
+    opacity: 1;
+    transition:all .5s ease;
+}
+.profilename.true {
+    font-size: x-small;
+    opacity: 0;
+    transition:all .5s ease;
+}
+.footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width:100%;
+}
+.footer Button {
+    display: flex !important;
+    width: 100%;
+    flex:.1%;
+}
+.content{
+    margin-top:2rem;
+}
+.content .css-cvhtoe-MuiButtonBase-root-MuiListItemButton-root{
+    height: 4rem !important;
+}
+.content .css-cvhtoe-MuiButtonBase-root-MuiListItemButton-root:hover {
+    color: black !important;
+    background-color: white !important;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+.content .css-cvhtoe-MuiButtonBase-root-MuiListItemButton-root.Mui-selected{
+    background-color: white !important;
+    color: black !important;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+.content .MuiListItemText-root.true{
+    display: none;
+}
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.content .MuiListItemIcon-root svg{
+   font-size: 30px;
+}

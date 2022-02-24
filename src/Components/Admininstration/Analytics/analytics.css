@@ -1,0 +1,23 @@
+.analytics {
+    background-color: white;
+    overflow-x: hidden;
+    height: 100vh;
+    margin:0;
+    padding:0;
+}
+.css-pgdzhj-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected{
+    background-color: black !important;
+    color: white !important;
+}
+.css-jwafdq-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected{
+    background-color: #636363 !important;
+}
+.css-1f2kitb-MuiDateRangePickerDay-root{
+    background-color: gray !important;
+}
+.css-1h14vs8-MuiDateRangePickerDay-root{
+    background-color: gray !important;
+}
+.css-1m3meum-MuiDateRangePickerDay-root{
+    background-color: gray !important;
+}

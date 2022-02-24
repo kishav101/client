@@ -1,0 +1,43 @@
+.sla {
+    --bs-gutter-x: 0;
+    background-color: white;
+    height: 100vh;
+    overflow-y: auto;
+}
+.borders {
+    border-radius: 0px;
+    box-shadow: 0px 1px 5px .3px rgb(26, 26, 26);
+}
+.borders-light {
+    border-radius: 0px;
+    box-shadow: 0px 2px 10px rgb(216, 216, 216);
+}
+
+
+.header-class {
+    background-color: green;
+    position:sticky;
+}
+.heading {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+#boottable {
+   
+    overflow: hidden;
+}
+.boottable>tr {
+    font-size:12px !important;
+    padding:0;
+    margin:0 ;
+    text-align: center;
+}
+.boottable>tr >td {
+    margin:0;
+    padding: 0;
+}
+.react-bootstrap-table {
+    padding: 0;
+    background-color: rgb(248, 248, 248);
+}

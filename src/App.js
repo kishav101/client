@@ -10,15 +10,14 @@ import Login from './Login';
 import Registration from './Registration';
 import ForgetPassword from './ForgetPassword';
 import Support from './ResquestSupport';
+import AdminLogin from "./Components/Admininstration/AdminLogin";
+import AdminDashboard from "./Components/Admininstration/AdminDashboard";
+import {RecoilRoot} from "recoil";
 
 
 function App() {
   return (
-  
-    
-
     <div className="App">
-    
    <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/Services" element={<Services/>} />
@@ -28,6 +27,8 @@ function App() {
         <Route path="/Logout" element={<Login/>} />
         <Route path="/ForgetPassword" element={<ForgetPassword/>} />
         <Route path="/Support" element={<Support/>} />
+       <Route path="/Admin" element={<AdminLogin/>} />
+       <Route path="/AdminDashboard" element={<RecoilRoot><AdminDashboard/></RecoilRoot>} />
    </Routes>
             
 
@@ -35,5 +36,4 @@ function App() {
   
   );
 }
-
 export default App;
