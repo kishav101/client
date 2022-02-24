@@ -128,7 +128,7 @@ export default function SLA() {
         <div className="sla d-flex flex-column">
            <div className='h-100'>
                 <div className="heading"style={{borderRadius: '0.25em', textAlign: 'center', color: 'purple', border: '1px solid purple', padding: '0.5em' }}>Service Licence Agreement Tickets </div>
-            <div className='mt-4 mx-4 overflow-hidden'>
+            <div className='mt-4 mx-4 overflow-hidden borders'>
                 <div  className='mt-1 '>
                     <BootstrapTable  hover condensed bodyClasses='boottable' keyField='id' filter={ filterFactory() }  data={ticketsJSON} columns={ columns } pagination={ paginationFactory(options) }  rowEvents={ rowEvents }  />
                 </div>
