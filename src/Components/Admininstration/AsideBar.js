@@ -57,7 +57,7 @@ function AsideBar() {
                     <hr/>
                     <ListItemButton
                         selected={selectedIndex === 2}
-                        onClick={(event) => navigate("/Admin")}
+                        onClick={(event) => navigate("/")}
                     >
                         <ListItemIcon>
                             <GrLogin />
