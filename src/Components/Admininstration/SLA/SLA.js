@@ -133,7 +133,7 @@ export default function SLA() {
                     <BootstrapTable  hover condensed bodyClasses='boottable' keyField='id' filter={ filterFactory() }  data={ticketsJSON} columns={ columns } pagination={ paginationFactory(options) }  rowEvents={ rowEvents }  />
                 </div>
             </div>
-            <div className="section px-4">
+            <div className="section px-4 mt-5">
                 <div className="col-lg-12 d-flex flex-row justify-content-between mx-3 mt-1 mb-2 ">
                     <TextField id="standard-basic" onChange={(e)=>setTicketID(e.target.value)} InputProps={{readOnly: true,}} label="Ticket ID" variant="standard" value={TicketID}/>
                      <Box sx={{ minWidth: 120 }}>
@@ -207,7 +207,7 @@ export default function SLA() {
                     <TextField id="standard-basic" onChange={(e)=>setreAssignedFrom(e.target.value)} InputProps={{readOnly: true,}} label="Re Assigned From " variant="standard" value={reAssignedFrom}/>
                 </div>
                 <div className="col-lg-12 d-flex flex-row justify-content-between mx-3 mb-5 pb-5">
-                    <Button variant='contained' style={{width:'100%'}}> Update Ticket</Button>
+                    <Button variant='contained'  onClick={()=>alert(`Ticket Number: ${TicketID} has been updated`)} style={{width:'100%'}}> Update Ticket</Button>
                 </div>
                 
             </div>
